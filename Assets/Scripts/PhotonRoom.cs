@@ -200,7 +200,7 @@ public class PhotonRoom : MonoBehaviourPunCallbacks, IInRoomCallbacks
             else
             {
                 RPC_CreatePlayer();
-            }
+            }            
         }
     }
 
