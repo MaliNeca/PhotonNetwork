@@ -15,6 +15,8 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
     public GameObject roomListingPrefab;
     public Transform roomsPanel;
 
+    public List<RoomInfo> roomListings;
+
     private void Awake()
     {
         //creates the singleton, lives withing the Main menu scene.
@@ -26,8 +28,8 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
     {
         //Connect to Master photon server
        
-            PhotonNetwork.ConnectUsingSettings();
-                
+        PhotonNetwork.ConnectUsingSettings();
+        roomListings = new List<RoomInfo>();
 
     }
 
@@ -36,25 +38,51 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
     {
         Debug.Log("Player has conntected to the Photon master server");
         PhotonNetwork.AutomaticallySyncScene = true;
-        
+        PhotonNetwork.NickName = "Player " + Random.Range(0, 1000);
+
     }
 
     //changes on available room on lobby
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
         base.OnRoomListUpdate(roomList);
-        RemoveRoomListings();
-        foreach(RoomInfo room in roomList)
-        {
-            ListRoom(room);
-        }
+        RemoveRoomListings(roomList);
     }
 
-    void RemoveRoomListings()
+    static System.Predicate<RoomInfo> ByName(string whichName)
     {
-        while(roomsPanel.childCount != 0)
+        return delegate (RoomInfo room)
         {
-            Destroy(roomsPanel.GetChild(0).gameObject);
+            return room.Name == whichName;
+        };
+    }
+
+    public void RemoveRoomListings(List<RoomInfo> roomList)
+    {
+        int tempIndex;
+        foreach (RoomInfo room in roomList)
+        {
+            if (roomListings != null)
+            {
+                tempIndex = roomListings.FindIndex(ByName(room.Name));
+
+            }
+            else
+            {
+                tempIndex = -1;
+            }
+
+            if (tempIndex != -1)
+            {
+                roomListings.RemoveAt(tempIndex);
+                Destroy(roomsPanel.GetChild(tempIndex).gameObject);
+            }
+            else
+            {
+                roomListings.Add(room);
+                ListRoom(room);
+            }
+
         }
     }
 
