@@ -634,7 +634,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   delayStart: 0
-  maxPlayers: 4
+  maxPlayers: 3
   menuScene: 0
   multiplayerScene: 1
 --- !u!4 &684266295
@@ -1846,7 +1846,7 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   ObservedComponents: []
-  viewIdField: 999
+  viewIdField: 998
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!114 &1862782009

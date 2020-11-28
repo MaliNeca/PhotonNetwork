@@ -23,7 +23,9 @@ public class PhotonLobby : MonoBehaviourPunCallbacks
     void Start()
     {
         //Connect to Master photon server
-        PhotonNetwork.ConnectUsingSettings();
+       
+            PhotonNetwork.ConnectUsingSettings();
+                
 
     }
 

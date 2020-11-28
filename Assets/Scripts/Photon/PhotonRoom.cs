@@ -40,7 +40,8 @@ public class PhotonRoom : MonoBehaviourPunCallbacks, IInRoomCallbacks
         {
             if (PhotonRoom.room != this)
             {
-                Destroy(PhotonRoom.room.gameObject);
+                Object.Destroy(PhotonRoom.room);
+                // Destroy(PhotonRoom.room.gameObject);
                 PhotonRoom.room = this;
             }
         }
@@ -217,6 +218,17 @@ public class PhotonRoom : MonoBehaviourPunCallbacks, IInRoomCallbacks
     [PunRPC]
     private void RPC_CreatePlayer()
     {
-        PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PhotonNetworkPlayer"), transform.position, Quaternion.identity, 0);
+        //creates player network controller but not player charachter
+        PhotonNetwork.InstantiateRoomObject(Path.Combine("PhotonPrefabs", "PhotonNetworkPlayer"), transform.position, Quaternion.identity, 0);
+    }
+
+
+    //disconnect player
+
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
+        base.OnPlayerLeftRoom(otherPlayer);
+        Debug.Log(otherPlayer.NickName + " has left the game");
+        playersInRoom--;
     }
 }

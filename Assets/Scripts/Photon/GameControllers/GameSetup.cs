@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using Photon.Pun;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameSetup : MonoBehaviour
@@ -17,5 +19,21 @@ public class GameSetup : MonoBehaviour
         {
             GameSetup.GS = this;
         }
+    }
+
+    public void DisconnectPlayer()
+    {
+        Destroy(PhotonRoom.room.gameObject);
+
+        StartCoroutine(DisconnectAndLoad());
+    }
+
+    IEnumerator DisconnectAndLoad()
+    {
+        PhotonNetwork.Disconnect();
+       // PhotonNetwork.LeaveRoom();
+        while (PhotonNetwork.IsConnected) yield return null;
+        // while(PhotonNetwork.InRoom) yield return null;
+        SceneManager.LoadScene(MultiplayerSettings.multiplayerSettings.menuScene);
     }
 }
