@@ -50,7 +50,8 @@ public class PlayerMovement : MonoBehaviour
     void BasicRotation()
     {
         float mouseX = Input.GetAxis("Mouse X") * Time.deltaTime * rotationSpeed;
-        transform.Rotate(new Vector3(0, mouseX, 0));
+        float mouseY = Input.GetAxis("Mouse Y") * Time.deltaTime * rotationSpeed;
+        transform.Rotate(new Vector3(mouseY, mouseX, 0));
 
     }
 }
