@@ -14,7 +14,9 @@ public class GameSetup : MonoBehaviour
     public int nextPlayerTeam;
     public Transform[] spawnPointsTeamOne;
     public Transform[] spawnPointsTeamTwo;
-
+    public GameObject[] playerCells;
+    public List<PhotonView> ListOfDragingObjects = new List<PhotonView>();
+    public List<int> allNumbers = new List<int>();
 
     private void OnEnable()
     {
@@ -46,9 +48,77 @@ public class GameSetup : MonoBehaviour
         {
             nextPlayerTeam = 2;
         }
-        else
+        else if(nextPlayerTeam == 2)
         {
-            nextPlayerTeam = 1;
+            nextPlayerTeam = 3;
         }
+        else if (nextPlayerTeam == 3)
+        {
+            nextPlayerTeam = 4;
+        }
+    }
+
+    public void SetActiveList(List<int> numbers, int team)
+    {
+        allNumbers = numbers;
+        switch (team)
+        {
+            case 1:
+                for (int i = 0; i < 4; i++)
+                {
+                    Debug.LogWarning(ListOfDragingObjects[i].ViewID);
+
+                    //ListOfDragingObjects[numbers[i]].gameObject.SetActive(true);
+                    ListOfDragingObjects[numbers[i]].transform.GetChild(0).gameObject.SetActive(true);
+                  
+
+
+                }
+                break;
+            case 2:
+                for (int i = 0; i < 4; i++)
+                {
+                    Debug.LogWarning(ListOfDragingObjects[i].ViewID);
+                    ListOfDragingObjects[numbers[i + 4]].transform.GetChild(0).gameObject.SetActive(true);
+                        
+                    //ListOfDragingObjects[numbers[i+4]].gameObject.SetActive(true);
+                }
+                break;
+            case 3:
+                for (int i = 0; i < 4; i++)
+                {
+                    Debug.LogWarning(ListOfDragingObjects[i].ViewID);
+                    //ListOfDragingObjects[numbers[i + 8]].gameObject.SetActive(true);
+
+                    ListOfDragingObjects[numbers[i+8]].transform.GetChild(0).gameObject.SetActive(true);
+                   
+                }
+                break;
+            case 4:
+                for (int i = 0; i < 4; i++)
+                {
+                    Debug.LogWarning(ListOfDragingObjects[i].ViewID);
+                    //ListOfDragingObjects[numbers[i + 12]].gameObject.SetActive(true);
+
+                    ListOfDragingObjects[numbers[i+12]].transform.GetChild(0).gameObject.SetActive(true);
+                
+                }
+                break;
+        }
+        
+
+    }
+
+    public void OnSwapClicked()
+    {
+        foreach(PhotonView GO in ListOfDragingObjects)
+        {
+            GO.gameObject.transform.GetChild(0).gameObject.SetActive(true);
+
+        }
+        /*foreach(DragAndDropItem item in FindObjectsOfType<DragAndDropItem>())
+        {
+            
+        }*/
     }
 }

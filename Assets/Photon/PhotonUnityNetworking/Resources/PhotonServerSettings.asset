@@ -44,6 +44,8 @@ MonoBehaviour:
   - RPC_Shooting
   - RPC_GetTeam
   - RPC_SentTeam
+  - PlaceItemSync
+  - RPC_GetList
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

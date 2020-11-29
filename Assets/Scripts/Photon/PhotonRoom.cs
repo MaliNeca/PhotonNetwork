@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PhotonRoom : MonoBehaviourPunCallbacks, IInRoomCallbacks
 {
@@ -27,7 +28,12 @@ public class PhotonRoom : MonoBehaviourPunCallbacks, IInRoomCallbacks
     public float startingTime;
     private float lessThanMaxPlayers;
     private float atMaxPlayer;
-    private float timeToStart;
+    public float timeToStart;
+
+    public Text myText;
+
+
+    
 
     private void Awake()
     {
@@ -40,8 +46,8 @@ public class PhotonRoom : MonoBehaviourPunCallbacks, IInRoomCallbacks
         {
             if (PhotonRoom.room != this)
             {
-                Object.Destroy(PhotonRoom.room);
-                // Destroy(PhotonRoom.room.gameObject);
+                //Object.Destroy(PhotonRoom.room);
+                Destroy(PhotonRoom.room.gameObject);
                 PhotonRoom.room = this;
             }
         }
@@ -58,8 +64,12 @@ public class PhotonRoom : MonoBehaviourPunCallbacks, IInRoomCallbacks
         lessThanMaxPlayers = startingTime;
         atMaxPlayer = 6;
         timeToStart = startingTime;
+              
 
     }
+
+   
+
 
     void Update()
     {
@@ -209,6 +219,7 @@ public class PhotonRoom : MonoBehaviourPunCallbacks, IInRoomCallbacks
     private void RPC_LoadedGameScene()
     {
         playerInGame++;
+        //mozda ovde
         if(playerInGame == PhotonNetwork.PlayerList.Length)
         {
             PV.RPC("RPC_CreatePlayer", RpcTarget.All);

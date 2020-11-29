@@ -69,3 +69,11 @@ MonoBehaviour:
   PV: {fileID: 878274126852949775}
   myAvatar: {fileID: 0}
   myTeam: 0
+  myRandomNumbers: ffffffff000000000000000000000000
+  AllRandomNumbers: 
+  myData: 
+  eno: {fileID: 0}
+  ajde: {fileID: 0}
+  getList: 0
+  getTeam: 0
+  founded: 1
