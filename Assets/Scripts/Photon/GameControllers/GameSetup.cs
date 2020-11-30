@@ -70,9 +70,9 @@ public class GameSetup : MonoBehaviour
 
                     //ListOfDragingObjects[numbers[i]].gameObject.SetActive(true);
                     ListOfDragingObjects[numbers[i]].transform.GetChild(0).gameObject.SetActive(true);
-                  
-
-
+                    ListOfDragingObjects[numbers[i]].transform.GetChild(0).GetComponent<Image>().raycastTarget = true;
+                    ListOfDragingObjects[numbers[i]].GetComponent<Image>().enabled = true;
+                    ListOfDragingObjects[numbers[i]].transform.GetComponentInParent<Transform>().SetAsFirstSibling();
                 }
                 break;
             case 2:
@@ -80,7 +80,8 @@ public class GameSetup : MonoBehaviour
                 {
                     Debug.LogWarning(ListOfDragingObjects[i].ViewID);
                     ListOfDragingObjects[numbers[i + 4]].transform.GetChild(0).gameObject.SetActive(true);
-                        
+                    ListOfDragingObjects[numbers[i +4]].transform.GetChild(0).GetComponent<Image>().raycastTarget = true;
+                    ListOfDragingObjects[numbers[i + 4]].GetComponent<Image>().enabled = true;
                     //ListOfDragingObjects[numbers[i+4]].gameObject.SetActive(true);
                 }
                 break;
@@ -89,9 +90,9 @@ public class GameSetup : MonoBehaviour
                 {
                     Debug.LogWarning(ListOfDragingObjects[i].ViewID);
                     //ListOfDragingObjects[numbers[i + 8]].gameObject.SetActive(true);
-
+                    ListOfDragingObjects[numbers[i + 8]].GetComponent<Image>().enabled = true;
                     ListOfDragingObjects[numbers[i+8]].transform.GetChild(0).gameObject.SetActive(true);
-                   
+                    ListOfDragingObjects[numbers[i + 8]].transform.GetChild(0).GetComponent<Image>().raycastTarget = true;
                 }
                 break;
             case 4:
@@ -100,8 +101,9 @@ public class GameSetup : MonoBehaviour
                     Debug.LogWarning(ListOfDragingObjects[i].ViewID);
                     //ListOfDragingObjects[numbers[i + 12]].gameObject.SetActive(true);
 
+                    ListOfDragingObjects[numbers[i + 12]].GetComponent<Image>().enabled = true;
                     ListOfDragingObjects[numbers[i+12]].transform.GetChild(0).gameObject.SetActive(true);
-                
+                    ListOfDragingObjects[numbers[i + 12]].transform.GetChild(0).GetComponent<Image>().raycastTarget = true;
                 }
                 break;
         }
