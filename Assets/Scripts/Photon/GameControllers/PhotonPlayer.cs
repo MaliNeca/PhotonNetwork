@@ -11,7 +11,7 @@ using System;
 public class PhotonPlayer : MonoBehaviour
 {
     public PhotonView PV;
-    public GameObject myAvatar;
+    public static GameObject myAvatar;
     public static PhotonPlayer player;
 
     public int myTeam;
@@ -30,7 +30,10 @@ public class PhotonPlayer : MonoBehaviour
     public bool founded = false;
 
 
-
+    void Awake()
+    {
+        PhotonPlayer.player = this;
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -86,6 +89,10 @@ public class PhotonPlayer : MonoBehaviour
             
         }
         
+    }
+    public PhotonView getPV()
+    {
+        return this.PV;
     }
 
     public void comeON()
@@ -167,55 +174,7 @@ public class PhotonPlayer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(myAvatar == null && myTeam != 0)
-        { 
-            if(myTeam == 1)
-            {
-                int spawnPicker = UnityEngine.Random.Range(0, GameSetup.GS.spawnPointsTeamOne.Length);
-                if (PV.IsMine)
-                {
-                    Debug.LogWarning("1 my team" + myTeam + " my list " + AllRandomNumbers.Count + " founded" + founded.ToString()) ;
-
-                    myAvatar = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerAvatar"),
-                          GameSetup.GS.spawnPointsTeamOne[spawnPicker].position, GameSetup.GS.spawnPointsTeamOne[spawnPicker].rotation, 0);
-
-                }
-            }
-            else if(myTeam == 2)
-            {
-
-                int spawnPicker = UnityEngine.Random.Range(0, GameSetup.GS.spawnPointsTeamTwo.Length);
-                if (PV.IsMine)
-                {
-                    Debug.LogWarning("2 my team" + myTeam + " my list " + AllRandomNumbers.Count + " founded" + founded.ToString());
-
-                    myAvatar = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerAvatar"),
-                          GameSetup.GS.spawnPointsTeamTwo[spawnPicker].position, GameSetup.GS.spawnPointsTeamTwo[spawnPicker].rotation, 0);
-
-                }
-            }else if(myTeam == 3)
-            {
-                if (PV.IsMine)
-                {
-                    Debug.LogWarning("3 my team" + myTeam + " my list " + AllRandomNumbers.Count + " founded" + founded.ToString());
-                }
-            }
-            else if(myTeam == 4)
-            {
-                if (PV.IsMine)
-                {
-                    Debug.LogWarning("4 my team" + myTeam + " my list " + AllRandomNumbers.Count + " founded" + founded.ToString());
-                }
-            }
-            else { Debug.Log("DA GA JEBEM"); }
-        }
-        /*if(getList && getTeam && founded)
-        {
-            
-           Debug.LogWarning("TEAM " + myTeam + "LIST COUNT" + AllRandomNumbers.Count);
-           if(PhotonNetwork.PlayerList.Length == 3)
-           founded = false;
-        }*/
+        
     }
 
     [PunRPC]
@@ -259,7 +218,7 @@ public class PhotonPlayer : MonoBehaviour
         List<int> x = (List<int>)bf.Deserialize(ins);
         AllRandomNumbers = x;
        
-        GameSetup.GS.SetActiveList(AllRandomNumbers, PhotonRoom.room.playersInRoom);
+        GameSetup.GS.SetActiveList(AllRandomNumbers, PhotonRoomCustomMatch.room.playersInRoom);
         getList = true;
         }
     }

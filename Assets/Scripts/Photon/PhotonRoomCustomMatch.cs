@@ -165,9 +165,13 @@ public class PhotonRoomCustomMatch : MonoBehaviourPunCallbacks, IInRoomCallbacks
 
     void ClearPlayerListings()
     {
-        for(int i = playersPanel.childCount -1; i>=0; i--)
+        if (playersPanel)
         {
-            Destroy(playersPanel.GetChild(i).gameObject);
+            for (int i = playersPanel.childCount - 1; i >= 0; i--)
+            {
+                if (playersPanel.GetChild(i).gameObject != null)
+                    Destroy(playersPanel.GetChild(i).gameObject);
+            }
         }
     }
 

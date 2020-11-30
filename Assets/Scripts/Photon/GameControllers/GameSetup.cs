@@ -28,8 +28,13 @@ public class GameSetup : MonoBehaviour
 
     public void DisconnectPlayer()
     {
-        Destroy(PhotonRoom.room.gameObject);
+        if(PhotonPlayer.player != null)
+        {
+            Destroy(PhotonPlayer.player.gameObject);
 
+        }
+        Destroy(PhotonRoomCustomMatch.room.gameObject);
+        
         StartCoroutine(DisconnectAndLoad());
     }
 
