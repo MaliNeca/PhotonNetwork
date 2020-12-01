@@ -21,6 +21,7 @@ public class GameSetup : MonoBehaviour
 
     //master view
     public GameObject playerNumbers;
+    public List<GameObject> playerNumbersList = new List<GameObject>();
     public GameObject playerOneNumbers;
     public GameObject playerTwoNumbers;
     public GameObject playerThreeNumbers;
@@ -195,23 +196,30 @@ public class GameSetup : MonoBehaviour
 
         }
 
+        //set object for playerOne view
         for (int i = 0; i < 4; i++)
         {
-            
-            Vector3 newVector = ListOfDragingObjects[allNumbers[i]].gameObject.transform.GetComponent<RectTransform>().localPosition;
+            if (playerNumbersList[allNumbers[i]].transform.childCount != 0) 
+            {   //object is not dragged 
+                //position of dragging object is on playerList
+                Vector3 newVector = ListOfDragingObjects[allNumbers[i]].gameObject.transform.GetComponent<RectTransform>().localPosition;
 
-            GameObject ga = ListOfDragingObjects[allNumbers[i]].gameObject;
-            //gameObject.transform.GetComponent<DragAndDropItem>().dragDisabled = true;
-            ga.transform.SetParent(playerOneNumbers.gameObject.transform.GetChild(i));
-            ga.transform.GetComponent<RectTransform>().localPosition = newVector;
-           /* ga.transform.GetComponent<RectTransform>().localPosition = new Vector3(0, 0, 0);
-            ga.transform.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 0);*/
-
+                GameObject ga = ListOfDragingObjects[allNumbers[i]].gameObject;
+                ga.transform.GetComponent<DragAndDropItem>().dragDisabled = true;
+                ga.transform.SetParent(playerOneNumbers.gameObject.transform.GetChild(i));
+                ga.transform.GetComponent<RectTransform>().localPosition = newVector;
+                ga.transform.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 0);
+                Debug.LogWarning("EEE");
+            }
+            else
+            {   //object is dragged 
+                //set size on sheet view
+                ListOfDragingObjects[allNumbers[i]].gameObject.transform.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 0);
+            }
         }
+
+
         
-        /*foreach(DragAndDropItem item in FindObjectsOfType<DragAndDropItem>())
-        {
-            
-        }*/
+        
     }
 }
