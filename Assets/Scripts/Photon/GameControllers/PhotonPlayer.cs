@@ -68,8 +68,8 @@ public class PhotonPlayer : MonoBehaviour
                     Debug.LogWarning(tako);
 
                
-                    GameSetup.GS.SetActiveList(AllRandomNumbers,1);
-               
+                    GameSetup.GS.SetActiveList(AllRandomNumbers,0);
+                    GameSetup.GS.SetList(AllRandomNumbers);
                         var o = new MemoryStream(); //Create something to hold the data
 
                          //Create a formatter
@@ -217,9 +217,11 @@ public class PhotonPlayer : MonoBehaviour
         //Read back the data
         List<int> x = (List<int>)bf.Deserialize(ins);
         AllRandomNumbers = x;
-       
-        GameSetup.GS.SetActiveList(AllRandomNumbers, PhotonRoomCustomMatch.room.playersInRoom);
-        getList = true;
+           
+            GameSetup.GS.SetActiveList(AllRandomNumbers, PhotonRoomCustomMatch.room.myNumberInRoom-1);
+            //GameSetup.GS.SetActiveList(AllRandomNumbers, myTeam);
+
+            getList = true;
         }
     }
 }

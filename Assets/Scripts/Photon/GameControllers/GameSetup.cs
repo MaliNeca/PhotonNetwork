@@ -63,9 +63,14 @@ public class GameSetup : MonoBehaviour
         }
     }
 
+    public void SetList(List<int> numbers)
+    {
+        this.allNumbers = numbers;
+    }
+
     public void SetActiveList(List<int> numbers, int team)
     {
-        allNumbers = numbers;
+        //allNumbers = numbers;
         switch (team)
         {
             case 1:
