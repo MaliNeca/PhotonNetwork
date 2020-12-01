@@ -90,6 +90,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98a87cb64b1c8e648b1ed6f05a581611, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dragDisabled: 0
 --- !u!114 &5986520635335399298
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -125,7 +126,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
+  m_SynchronizePosition: 0
   m_SynchronizeRotation: 0
   m_SynchronizeScale: 0
 --- !u!1 &4538957072842147698

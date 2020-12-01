@@ -12,7 +12,7 @@ using System;
 [Serializable]
 public class DragAndDropItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-	public static bool dragDisabled = false;										// Drag start global disable
+	public bool dragDisabled = false;										// Drag start global disable
 	public static DragAndDropItem draggedItem;                                      // Item that is dragged now
 	public static GameObject icon;                                                  // Icon of dragged item
 	public static DragAndDropCell sourceCell;                                       // From this cell dragged item is

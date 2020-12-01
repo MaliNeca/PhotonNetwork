@@ -18,11 +18,77 @@ public class GameSetup : MonoBehaviour
     public List<PhotonView> ListOfDragingObjects = new List<PhotonView>();
     public List<int> allNumbers = new List<int>();
 
+
+    //master view
+    public GameObject playerNumbers;
+    public GameObject playerOneNumbers;
+    public GameObject playerTwoNumbers;
+    public GameObject playerThreeNumbers;
+    public GameObject playerFourNumbers;
+
+    public GameObject sheet;
+    public Button swapButton;
+
     private void OnEnable()
     {
         if(GameSetup.GS == null)
         {
             GameSetup.GS = this;
+        }
+    }
+
+    void Start()
+    {
+        foreach(PhotonView pv in ListOfDragingObjects)
+        {
+            pv.gameObject.transform.GetComponent<RectTransform>().localPosition = new Vector3(0, 0, 0);
+            pv.gameObject.transform.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 0);
+        }
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+
+            //set Sheet view position
+            sheet.transform.SetPositionAndRotation(new Vector3(0, 0, 0), sheet.transform.rotation);
+            sheet.transform.GetComponent<RectTransform>().sizeDelta = new Vector2(600, 600);
+            sheet.transform.GetComponent<GridLayoutGroup>().cellSize = new Vector2(120, 120);
+
+            //set objects active
+            playerOneNumbers.gameObject.SetActive(true);
+            playerTwoNumbers.gameObject.SetActive(true);
+            playerThreeNumbers.gameObject.SetActive(true);
+            playerFourNumbers.gameObject.SetActive(true);
+
+            playerNumbers.transform.GetComponent<CanvasGroup>().alpha = 0;
+
+
+            //set button active
+            swapButton.gameObject.SetActive(true);
+
+            /* //set Sheet view position
+             sheet.transform.SetPositionAndRotation(new Vector3(0, 0, 0), sheet.transform.rotation);
+             sheet.transform.GetComponent<RectTransform>().sizeDelta = new Vector2(600, 600);
+             sheet.transform.GetComponent<GridLayoutGroup>().cellSize = new Vector2(120, 120);
+
+
+
+
+             
+
+
+
+             //set players views enabled
+             playerNumbers.transform.GetComponent<CanvasGroup>().alpha = 0;
+             //  playerNumbers.transform.GetComponent<CanvasGroup>().interactable = false;
+             playerOneNumbers.transform.GetComponent<CanvasGroup>().alpha = 1;
+             playerTwoNumbers.transform.GetComponent<CanvasGroup>().alpha = 1;
+             playerThreeNumbers.transform.GetComponent<CanvasGroup>().alpha = 1;
+             playerFourNumbers.transform.GetComponent<CanvasGroup>().alpha = 1;*/
+
+
+
+
+
         }
     }
 
@@ -90,7 +156,7 @@ public class GameSetup : MonoBehaviour
                 {
                     Debug.LogWarning(ListOfDragingObjects[i].ViewID);
                     ListOfDragingObjects[numbers[i + 4]].transform.GetChild(0).gameObject.SetActive(true);
-                    ListOfDragingObjects[numbers[i +4]].transform.GetChild(0).GetComponent<Image>().raycastTarget = true;
+                    ListOfDragingObjects[numbers[i + 4]].transform.GetChild(0).GetComponent<Image>().raycastTarget = true;
                     ListOfDragingObjects[numbers[i + 4]].GetComponent<Image>().enabled = true;
                     //ListOfDragingObjects[numbers[i+4]].gameObject.SetActive(true);
                 }
@@ -101,7 +167,7 @@ public class GameSetup : MonoBehaviour
                     Debug.LogWarning(ListOfDragingObjects[i].ViewID);
                     //ListOfDragingObjects[numbers[i + 8]].gameObject.SetActive(true);
                     ListOfDragingObjects[numbers[i + 8]].GetComponent<Image>().enabled = true;
-                    ListOfDragingObjects[numbers[i+8]].transform.GetChild(0).gameObject.SetActive(true);
+                    ListOfDragingObjects[numbers[i + 8]].transform.GetChild(0).gameObject.SetActive(true);
                     ListOfDragingObjects[numbers[i + 8]].transform.GetChild(0).GetComponent<Image>().raycastTarget = true;
                 }
                 break;
@@ -112,7 +178,7 @@ public class GameSetup : MonoBehaviour
                     //ListOfDragingObjects[numbers[i + 12]].gameObject.SetActive(true);
 
                     ListOfDragingObjects[numbers[i + 12]].GetComponent<Image>().enabled = true;
-                    ListOfDragingObjects[numbers[i+12]].transform.GetChild(0).gameObject.SetActive(true);
+                    ListOfDragingObjects[numbers[i + 12]].transform.GetChild(0).gameObject.SetActive(true);
                     ListOfDragingObjects[numbers[i + 12]].transform.GetChild(0).GetComponent<Image>().raycastTarget = true;
                 }
                 break;
@@ -128,6 +194,21 @@ public class GameSetup : MonoBehaviour
             GO.gameObject.transform.GetChild(0).gameObject.SetActive(true);
 
         }
+
+        for (int i = 0; i < 4; i++)
+        {
+            
+            Vector3 newVector = ListOfDragingObjects[allNumbers[i]].gameObject.transform.GetComponent<RectTransform>().localPosition;
+
+            GameObject ga = ListOfDragingObjects[allNumbers[i]].gameObject;
+            //gameObject.transform.GetComponent<DragAndDropItem>().dragDisabled = true;
+            ga.transform.SetParent(playerOneNumbers.gameObject.transform.GetChild(i));
+            ga.transform.GetComponent<RectTransform>().localPosition = newVector;
+           /* ga.transform.GetComponent<RectTransform>().localPosition = new Vector3(0, 0, 0);
+            ga.transform.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 0);*/
+
+        }
+        
         /*foreach(DragAndDropItem item in FindObjectsOfType<DragAndDropItem>())
         {
             
