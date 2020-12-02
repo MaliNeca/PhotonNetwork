@@ -1,11 +1,8 @@
 ﻿using Photon.Pun;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
-using UnityEngine.UI;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Runtime.Serialization;
 using System;
 
 public class PhotonPlayer : MonoBehaviour
@@ -17,164 +14,81 @@ public class PhotonPlayer : MonoBehaviour
     public int myTeam;
 
     //random list
-    public int[] myRandomNumbers = new int[4];
+    //public int[] myRandomNumbers = new int[4];
     public List<int> AllRandomNumbers = new List<int>();
+
+    //create Random generator and binary formatter
     private static System.Random rng = new System.Random();
     public string myData;
     private BinaryFormatter bf = new BinaryFormatter();
-    public Text eno;
-    public Text ajde;
 
     public bool getList = false;
     public bool getTeam = false;
     public bool founded = false;
 
-
     void Awake()
     {
         PhotonPlayer.player = this;
     }
+
     // Start is called before the first frame update
     void Start()
     {
         PV = GetComponent<PhotonView>();
-       
+
         if (PhotonNetwork.IsMasterClient)
         {
             if (PV.IsMine)
+            {
+                //randomize list
+                //Debug.Log("max player in room" + PhotonNetwork.CurrentRoom.MaxPlayers);
+                while (true)
                 {
-                      
-                    //randomize list
-                    while (true)
+                    int num = rng.Next(0, (PhotonNetwork.CurrentRoom.MaxPlayers - 1) * 4);
+                    if (!AllRandomNumbers.Contains(num))
                     {
-                        int num = rng.Next(0, 16);
-                        if (!AllRandomNumbers.Contains(num))
-                        {
-                            AllRandomNumbers.Add(num);
-                        }
-                        if (AllRandomNumbers.Count == 16)
-                        {
-                            break;
-                        }
+                        AllRandomNumbers.Add(num);
                     }
-
-                    string tako = "LISTA NA MASTERU: ";
-                    foreach (int i in AllRandomNumbers)
+                    if (AllRandomNumbers.Count == ((PhotonNetwork.CurrentRoom.MaxPlayers - 1) * 4))
                     {
-                        tako += " " + i.ToString();
-                        
-                    // listOfObjects[i].GetComponentInChildren<TextMesh>().text = i.ToString();
+                        break;
                     }
-                    Debug.LogWarning(tako);
+                }
+                //send gameSetup list of numbers
+                GameSetup.GS.SetActiveList(AllRandomNumbers, 0);
+                GameSetup.GS.SetList(AllRandomNumbers);
 
-               
-                    GameSetup.GS.SetActiveList(AllRandomNumbers,0);
-                    GameSetup.GS.SetList(AllRandomNumbers);
-                        var o = new MemoryStream(); //Create something to hold the data
+                //Create something to hold the data
+                var o = new MemoryStream();
+                //Save the list
+                bf.Serialize(o, AllRandomNumbers);
+                //Convert the data to a string
+                var data = Convert.ToBase64String(o.GetBuffer());
 
-                         //Create a formatter
-                        bf.Serialize(o, AllRandomNumbers); //Save the list
-                        var data = Convert.ToBase64String(o.GetBuffer()); //Convert the data to a string
-                       // PV.RPC("RPC_GetList", RpcTarget.OthersBuffered, data);
-                      /*  myTeam = GameSetup.GS.nextPlayerTeam;
-                        GameSetup.GS.UpdateTeam();*/
-
+                //PV.RPC("RPC_GetList", RpcTarget.OthersBuffered, data);
             }
-            
         }
-
+        //call master client to get team
         if (PV.IsMine)
         {
             PV.RPC("RPC_GetTeam", RpcTarget.MasterClient);
-            
         }
-        
-    }
-    public PhotonView getPV()
-    {
-        return this.PV;
-    }
-
-    public void comeON()
-    {
-        if(PV.IsMine)
-        Debug.LogWarning("TEAM " + myTeam + "LIST COUNT" + AllRandomNumbers.Count );
-
-        /*if (PV.IsMine)
-        {
-            switch (myTeam)
-            {
-                case 1:
-                    {
-                        
-                            Debug.LogWarning("P1 COUNT " + AllRandomNumbers.Count);
-
-                            string s = " ";
-                            for (int i = 0; i < myRandomNumbers.Length; i++)
-                            {
-                                myRandomNumbers[i] = AllRandomNumbers[i];
-                                s += " " + myRandomNumbers[i];
-                            }
-                            Debug.LogWarning("Player 1 Numbers: " + s + "COUNT " + AllRandomNumbers.Count);
-
-                        
-                        break;
-                    }
-                case 2:
-                    {
-                        
-                            Debug.LogWarning("P2 COUNT " + AllRandomNumbers.Count);
-
-                            string s = " ";
-                            for (int i = 0; i < myRandomNumbers.Length; i++)
-                            {
-                                myRandomNumbers[i] = AllRandomNumbers[i + 4];
-                                s += " " + myRandomNumbers[i];
-
-                            }
-                            Debug.LogWarning("Player 2 Numbers: " + s + "COUNT " + myRandomNumbers.Length);
-                        
-                        break;
-                    }
-                case 3:
-                    {
-                        
-                            Debug.LogWarning("P3 COUNT " + AllRandomNumbers.Count);
-
-                            string s = " ";
-                            for (int i = 0; i < myRandomNumbers.Length; i++)
-                            {
-                                myRandomNumbers[i] = AllRandomNumbers[i + 8];
-                                s += " " + myRandomNumbers[i];
-                            }
-                            Debug.LogWarning("Player 3 Numbers: " + s + "COUNT " + AllRandomNumbers.Count);
-                        
-                        break;
-                    }
-
-                case 4:
-                    {
-                        
-                            Debug.LogWarning("P4 COUNT " + AllRandomNumbers.Count);
-
-                            string s = " ";
-                            for (int i = 0; i < myRandomNumbers.Length; i++)
-                            {
-                                myRandomNumbers[i] = AllRandomNumbers[i];
-                            }
-                            Debug.LogWarning("Player 4 Numbers: " + s + "COUNT " + AllRandomNumbers.Count);
-                        
-                        break;
-                    }
-                default: break;
-            }
-        }*/
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
+    }
+
+    //call rpc to update view on all clients
+    public void sendAll()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            //Debug.LogWarning("Send all recive");
+            PV.RPC("RPC_GameSetupSetVisible", RpcTarget.Others);
+        }
     }
 
     [PunRPC]
@@ -182,19 +96,20 @@ public class PhotonPlayer : MonoBehaviour
     {
         myTeam = GameSetup.GS.nextPlayerTeam;
         GameSetup.GS.UpdateTeam();
-        Debug.LogWarning("MASTER GET TEAM" + myTeam.ToString());
+
+        //Debug.LogWarning("MASTER GET TEAM" + myTeam.ToString());
+
         PV.RPC("RPC_SentTeam", RpcTarget.OthersBuffered, myTeam);
         if (PV.IsMine)
         {
-            var o = new MemoryStream(); //Create something to hold the data
-
-            //Create a formatter
-            bf.Serialize(o, AllRandomNumbers); //Save the list
+            //Create something to hold the data
+            var o = new MemoryStream();
+            //Save the list
+            bf.Serialize(o, AllRandomNumbers);
             var data = Convert.ToBase64String(o.GetBuffer());
+            //send list to other players
             PV.RPC("RPC_GetList", RpcTarget.OthersBuffered, data);
         }
-       
-
     }
 
     [PunRPC]
@@ -209,35 +124,27 @@ public class PhotonPlayer : MonoBehaviour
     {
         if (AllRandomNumbers.Count == 0)
         {
-        //Create a formatter 
-        //var bf = new BinaryFormatter();   
-        // Reading it back in
-        var ins = new MemoryStream(Convert.FromBase64String(data)); //Create an input stream from the string
+            //Create an input stream from the string
+            var ins = new MemoryStream(Convert.FromBase64String(data));
 
-        //Read back the data
-        List<int> x = (List<int>)bf.Deserialize(ins);
-        AllRandomNumbers = x;
-           
-            GameSetup.GS.SetActiveList(AllRandomNumbers, PhotonRoomCustomMatch.room.myNumberInRoom-1);
+            //Read back the data
+            List<int> x = (List<int>)bf.Deserialize(ins);
+
+            //set AllRandomNumbers
+            AllRandomNumbers = x;
+
+            //set List for Players
+            GameSetup.GS.SetActiveList(AllRandomNumbers, PhotonRoomCustomMatch.room.myNumberInRoom - 1);
+
             //GameSetup.GS.SetActiveList(AllRandomNumbers, myTeam);
-
             getList = true;
         }
     }
 
-    public void sendAll()
-    {
-        if (PhotonNetwork.IsMasterClient)
-        {
-            Debug.LogWarning("Send all recive");
-            PV.RPC("RPC_GameSetupSetVisible", RpcTarget.Others);
-        }
-    }
     [PunRPC]
     public void RPC_GameSetupSetVisible()
     {
-        Debug.LogWarning("rpc Send all recive");
-
+        //Debug.LogWarning("rpc Send all recive");
         GameSetup.GS.setView();
     }
 }

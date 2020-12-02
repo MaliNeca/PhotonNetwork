@@ -67,7 +67,6 @@ public class PhotonRoomCustomMatch : MonoBehaviourPunCallbacks, IInRoomCallbacks
         lessThanMaxPlayers = startingTime;
         atMaxPlayer = 6;
         timeToStart = startingTime;
-
     }
 
     void Update()
@@ -75,10 +74,7 @@ public class PhotonRoomCustomMatch : MonoBehaviourPunCallbacks, IInRoomCallbacks
         //For delay start only, count down to start
         if (MultiplayerSettings.multiplayerSettings.delayStart)
         {
-            if (playersInRoom == 1)
-            {
-                RestartTimer();
-            }
+            if (playersInRoom == 1) RestartTimer();
             if (!isGameLoaded)
             {
                 if (readyToStart)
@@ -86,7 +82,8 @@ public class PhotonRoomCustomMatch : MonoBehaviourPunCallbacks, IInRoomCallbacks
                     atMaxPlayer -= Time.deltaTime;
                     lessThanMaxPlayers = atMaxPlayer;
                     timeToStart = atMaxPlayer;
-                } else if (readyToCount)
+                }
+                else if (readyToCount)
                 {
                     lessThanMaxPlayers -= Time.deltaTime;
                     timeToStart = lessThanMaxPlayers;
@@ -115,14 +112,12 @@ public class PhotonRoomCustomMatch : MonoBehaviourPunCallbacks, IInRoomCallbacks
         SceneManager.sceneLoaded -= OnSceneFinishedLoading;
     }
 
-
-
+    //player join room
     public override void OnJoinedRoom()
     {
         //sets player data when we join the room
         base.OnJoinedRoom();
         Debug.Log("We are in room now");
-
         lobbyGameObject.SetActive(false);
         roomGO.SetActive(true);
         if (PhotonNetwork.IsMasterClient)
@@ -132,16 +127,13 @@ public class PhotonRoomCustomMatch : MonoBehaviourPunCallbacks, IInRoomCallbacks
         }
         //clear current player list
         ClearPlayerListings();
-
         //add all players
         ListAllPlayers();
-
 
         photonPlayers = PhotonNetwork.PlayerList;
         playersInRoom = photonPlayers.Length;
         //PlayerID
         myNumberInRoom = playersInRoom;
-        
 
         //for delay start only
         if (MultiplayerSettings.multiplayerSettings.delayStart)
@@ -157,12 +149,10 @@ public class PhotonRoomCustomMatch : MonoBehaviourPunCallbacks, IInRoomCallbacks
                 if (!PhotonNetwork.IsMasterClient) return;
                 PhotonNetwork.CurrentRoom.IsOpen = false;
             }
-
         }
-       
-
     }
 
+    //clear player list when play leave
     void ClearPlayerListings()
     {
         if (playersPanel)
@@ -175,11 +165,12 @@ public class PhotonRoomCustomMatch : MonoBehaviourPunCallbacks, IInRoomCallbacks
         }
     }
 
+    //add all players in room on list
     void ListAllPlayers()
     {
         if (PhotonNetwork.InRoom)
         {
-            foreach(Player player in PhotonNetwork.PlayerList)
+            foreach (Player player in PhotonNetwork.PlayerList)
             {
                 GameObject tempListing = Instantiate(playerListingPrefab, playersPanel);
                 Text tempText = tempListing.transform.GetChild(0).GetComponent<Text>();
@@ -188,8 +179,7 @@ public class PhotonRoomCustomMatch : MonoBehaviourPunCallbacks, IInRoomCallbacks
         }
     }
 
-
-
+    //add player to room list
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         base.OnPlayerEnteredRoom(newPlayer);
@@ -217,14 +207,22 @@ public class PhotonRoomCustomMatch : MonoBehaviourPunCallbacks, IInRoomCallbacks
 
     public void StartGame()
     {
+        //disable master load game if not all player in the room
+        /*if (PhotonNetwork.CurrentRoom.MaxPlayers != playersInRoom)
+        {
+            Debug.LogWarning("Not enough players, room size is: " + PhotonNetwork.CurrentRoom.MaxPlayers);
+            return;
+        }*/
         isGameLoaded = true;
         if (!PhotonNetwork.IsMasterClient) return;
         if (MultiplayerSettings.multiplayerSettings.delayStart)
         {
             PhotonNetwork.CurrentRoom.IsOpen = false;
         }
-        //delete current room from list???
-       
+        else
+        {
+            PhotonNetwork.CurrentRoom.IsOpen = false;
+        }
         PhotonNetwork.LoadLevel(MultiplayerSettings.multiplayerSettings.multiplayerScene);
     }
 
@@ -237,6 +235,7 @@ public class PhotonRoomCustomMatch : MonoBehaviourPunCallbacks, IInRoomCallbacks
         readyToCount = false;
         readyToStart = false;
     }
+
     void OnSceneFinishedLoading(Scene scene, LoadSceneMode mode)
     {
         //caled when multiplayer scene is loaded
@@ -244,7 +243,6 @@ public class PhotonRoomCustomMatch : MonoBehaviourPunCallbacks, IInRoomCallbacks
         if (currentScene == MultiplayerSettings.multiplayerSettings.multiplayerScene)
         {
             isGameLoaded = true;
-
             //for delay start game 
             if (MultiplayerSettings.multiplayerSettings.delayStart)
             {
@@ -254,7 +252,7 @@ public class PhotonRoomCustomMatch : MonoBehaviourPunCallbacks, IInRoomCallbacks
             else
             {
                 RPC_CreatePlayer();
-            }            
+            }
         }
     }
 
@@ -262,7 +260,7 @@ public class PhotonRoomCustomMatch : MonoBehaviourPunCallbacks, IInRoomCallbacks
     private void RPC_LoadedGameScene()
     {
         playerInGame++;
-        if(playerInGame == PhotonNetwork.PlayerList.Length)
+        if (playerInGame == PhotonNetwork.PlayerList.Length)
         {
             PV.RPC("RPC_CreatePlayer", RpcTarget.All);
         }
@@ -275,9 +273,7 @@ public class PhotonRoomCustomMatch : MonoBehaviourPunCallbacks, IInRoomCallbacks
         PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PhotonNetworkPlayer"), transform.position, Quaternion.identity, 0);
     }
 
-
     //disconnect player
-
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
         base.OnPlayerLeftRoom(otherPlayer);
@@ -287,19 +283,18 @@ public class PhotonRoomCustomMatch : MonoBehaviourPunCallbacks, IInRoomCallbacks
         ListAllPlayers();
     }
 
+    //button Copy clicked
     public void OnCopyButtonClicked()
     {
-
         PhotonNetwork.CurrentRoom.Name.CopyToClipboard();
         Debug.Log(PhotonNetwork.CurrentRoom.Name);
     }
 }
 
+//class for Clipboard
 public static class ClipboardExtension
-{
-    /// <summary>
-    /// Puts the string into the Clipboard.
-    /// </summary>
+{   
+    //copy room Code to clipboard
     public static void CopyToClipboard(this string str)
     {
         GUIUtility.systemCopyBuffer = str;

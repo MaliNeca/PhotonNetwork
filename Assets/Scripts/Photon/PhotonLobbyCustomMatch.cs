@@ -19,8 +19,14 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
 
     public List<RoomInfo> roomListings;
 
+    //roomCode for access
     private static System.Random random = new System.Random();
-    private int roomCodeLength = 10; 
+    private int roomCodeLength = 10;
+
+    //room settings
+    private static int minRoomSize = 5;
+    private static int maxRoomSize = 8;
+
     private void Awake()
     {
         //creates the singleton, lives withing the Main menu scene.
@@ -31,9 +37,13 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
     void Start()
     {
         //Connect to Master photon server
-
         PhotonNetwork.ConnectUsingSettings();
         roomListings = new List<RoomInfo>();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
 
     }
 
@@ -43,7 +53,6 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
         Debug.Log("Player has conntected to the Photon master server");
         PhotonNetwork.AutomaticallySyncScene = true;
         PhotonNetwork.NickName = "Player " + Random.Range(0, 1000);
-
     }
 
     //changes on available room on lobby
@@ -69,7 +78,6 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
             if (roomListings != null)
             {
                 tempIndex = roomListings.FindIndex(ByName(room.Name));
-
             }
             else
             {
@@ -86,10 +94,10 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
                 roomListings.Add(room);
                 ListRoom(room);
             }
-
         }
     }
 
+    //display Room in room panel
     void ListRoom(RoomInfo newRoom)
     {
         if (newRoom.IsOpen && newRoom.IsVisible)
@@ -97,7 +105,7 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
             GameObject tempListing = Instantiate(roomListingPrefab, roomsPanel);
             RoomButton tempButton = tempListing.GetComponent<RoomButton>();
 
-            tempButton.roomName = newRoom.Name.Substring(roomCodeLength);
+            tempButton.roomName = newRoom.Name.Substring(roomCodeLength); 
             tempButton.roomSize = newRoom.MaxPlayers;
             tempButton.SetRoom();
         }
@@ -107,6 +115,12 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
     public void CreateRoom()
     {
         Debug.Log("Trying to create a new room");
+        //check default room size
+        if (roomSize < minRoomSize || roomSize > maxRoomSize)
+        {
+            Debug.LogWarning("Room size must be between 5 and 8 players including teacher");
+            return;
+        }
         RoomOptions roomOps = new RoomOptions() { IsVisible = true, IsOpen = true, MaxPlayers = (byte)roomSize };
         PhotonNetwork.CreateRoom(roomName, roomOps);
     }
@@ -114,22 +128,14 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
     public override void OnCreateRoomFailed(short returnCode, string message)
     {
         Debug.Log("Tried to create a new room but failed, there must be a room with the same name");
-        //CreateRoom();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 
     //when user change room name
     public void OnRoomNameChanged(string nameIn)
     {
-
+        //generate room Code
         roomName = RandomString(roomCodeLength);
         roomName = roomName + nameIn;
-        //roomName = nameIn;
     }
 
     //when user change size
@@ -138,7 +144,7 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
         roomSize = int.Parse(sizeIn);
     }
 
-    //when user click join lobby
+    //when user click join lobby, disabled for now
     public void JoinLobbyOnClick()
     {
         if (!PhotonNetwork.InLobby)
@@ -147,6 +153,16 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
         }
     }
 
+    //join room with code
+    public void JoinRoomOnClick()
+    {
+        if (roomCode.Length != 0)
+        {
+            PhotonNetwork.JoinRoom(roomCode);
+        }
+    }
+
+    //generate room code
     public static string RandomString(int length)
     {
         const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -154,20 +170,10 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
           .Select(s => s[random.Next(s.Length)]).ToArray());
     }
 
+    //set Room code on user input
     public void OnRoomCodeChanged(string nameIn)
     {
-
         roomCode = nameIn;
-       
-        //roomName = nameIn;
-    }
-
-    public void JoinRoomOnClick()
-    {
-        if(roomCode.Length != 0)
-        {
-            PhotonNetwork.JoinRoom(roomCode);
-        }
     }
 }
 
