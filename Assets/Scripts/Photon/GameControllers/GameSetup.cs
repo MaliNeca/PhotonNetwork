@@ -26,6 +26,9 @@ public class GameSetup : MonoBehaviour
     public GameObject playerTwoNumbers;
     public GameObject playerThreeNumbers;
     public GameObject playerFourNumbers;
+    public bool numbersSet = false;
+   
+    public GameObject PV;
 
     public GameObject sheet;
     public Button swapButton;
@@ -87,10 +90,23 @@ public class GameSetup : MonoBehaviour
              playerFourNumbers.transform.GetComponent<CanvasGroup>().alpha = 1;*/
 
 
-
-
+            //OnSwapClicked();
+            
 
         }
+    }
+
+    void Update()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            if (numbersSet)
+            {
+                setClientViews();
+            }
+        }
+
+
     }
 
     public void DisconnectPlayer()
@@ -133,6 +149,7 @@ public class GameSetup : MonoBehaviour
     public void SetList(List<int> numbers)
     {
         this.allNumbers = numbers;
+        this.numbersSet = true;
     }
 
     public void SetActiveList(List<int> numbers, int team)
@@ -188,9 +205,10 @@ public class GameSetup : MonoBehaviour
 
     }
 
-    public void OnSwapClicked()
+    public void setClientViews()
     {
-        foreach(PhotonView GO in ListOfDragingObjects)
+        numbersSet = false;
+        foreach (PhotonView GO in ListOfDragingObjects)
         {
             GO.gameObject.transform.GetChild(0).gameObject.SetActive(true);
 
@@ -199,27 +217,90 @@ public class GameSetup : MonoBehaviour
         //set object for playerOne view
         for (int i = 0; i < 4; i++)
         {
-            if (playerNumbersList[allNumbers[i]].transform.childCount != 0) 
-            {   //object is not dragged 
-                //position of dragging object is on playerList
-                Vector3 newVector = ListOfDragingObjects[allNumbers[i]].gameObject.transform.GetComponent<RectTransform>().localPosition;
 
-                GameObject ga = ListOfDragingObjects[allNumbers[i]].gameObject;
-                ga.transform.GetComponent<DragAndDropItem>().dragDisabled = true;
-                ga.transform.SetParent(playerOneNumbers.gameObject.transform.GetChild(i));
-                ga.transform.GetComponent<RectTransform>().localPosition = newVector;
-                ga.transform.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 0);
-                Debug.LogWarning("EEE");
-            }
-            else
-            {   //object is dragged 
-                //set size on sheet view
-                ListOfDragingObjects[allNumbers[i]].gameObject.transform.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 0);
-            }
+            //object is not dragged 
+            //position of dragging object is on playerList
+            Vector3 newVector = ListOfDragingObjects[allNumbers[i]].gameObject.transform.GetComponent<RectTransform>().localPosition;
+
+            GameObject ga = ListOfDragingObjects[allNumbers[i]].gameObject;
+            ga.transform.GetComponent<DragAndDropItem>().dragDisabled = true;
+            ga.transform.SetParent(playerOneNumbers.gameObject.transform.GetChild(i));
+            ga.transform.GetComponent<RectTransform>().localPosition = newVector;
+            ga.transform.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 0);
+           
+            
         }
 
+        //set object for playerTwo view
+        for (int i = 0; i < 4; i++)
+        {
 
+            //object is not dragged 
+            //position of dragging object is on playerList
+            Vector3 newVector = ListOfDragingObjects[allNumbers[i+4]].gameObject.transform.GetComponent<RectTransform>().localPosition;
+
+            GameObject ga = ListOfDragingObjects[allNumbers[i+4]].gameObject;
+            ga.transform.GetComponent<DragAndDropItem>().dragDisabled = true;
+            ga.transform.SetParent(playerTwoNumbers.gameObject.transform.GetChild(i));
+            ga.transform.GetComponent<RectTransform>().localPosition = newVector;
+            ga.transform.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 0);
+           
+        }
+
+        //set object for playerThree view
+        for (int i = 0; i < 4; i++)
+        {
+
+            //object is not dragged 
+            //position of dragging object is on playerList
+            Vector3 newVector = ListOfDragingObjects[allNumbers[i + 8]].gameObject.transform.GetComponent<RectTransform>().localPosition;
+
+            GameObject ga = ListOfDragingObjects[allNumbers[i + 8]].gameObject;
+            ga.transform.GetComponent<DragAndDropItem>().dragDisabled = true;
+            ga.transform.SetParent(playerThreeNumbers.gameObject.transform.GetChild(i));
+            ga.transform.GetComponent<RectTransform>().localPosition = newVector;
+            ga.transform.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 0);
+
+        }
+
+        //set object for playerFour view
+        for (int i = 0; i < 4; i++)
+        {
+
+            //object is not dragged 
+            //position of dragging object is on playerList
+            Vector3 newVector = ListOfDragingObjects[allNumbers[i + 12]].gameObject.transform.GetComponent<RectTransform>().localPosition;
+
+            GameObject ga = ListOfDragingObjects[allNumbers[i + 12]].gameObject;
+            ga.transform.GetComponent<DragAndDropItem>().dragDisabled = true;
+            ga.transform.SetParent(playerFourNumbers.gameObject.transform.GetChild(i));
+            ga.transform.GetComponent<RectTransform>().localPosition = newVector;
+            ga.transform.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 0);
+
+        }
+    }
+    public void OnSwapClicked()
+    {
         
+      
+        if (PhotonNetwork.IsMasterClient)
+        {
+            Debug.LogWarning("Call rpc");
+
+            PhotonPlayer.player.sendAll();
+        }
         
+    }
+
+    
+    public void setView()
+    {
+        Debug.LogWarning("RPC CALLED");
+
+        foreach (PhotonView GO in ListOfDragingObjects)
+        {
+            GO.gameObject.transform.GetChild(0).gameObject.SetActive(true);
+
+        }
     }
 }

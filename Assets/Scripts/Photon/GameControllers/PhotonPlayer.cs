@@ -224,4 +224,20 @@ public class PhotonPlayer : MonoBehaviour
             getList = true;
         }
     }
+
+    public void sendAll()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            Debug.LogWarning("Send all recive");
+            PV.RPC("RPC_GameSetupSetVisible", RpcTarget.Others);
+        }
+    }
+    [PunRPC]
+    public void RPC_GameSetupSetVisible()
+    {
+        Debug.LogWarning("rpc Send all recive");
+
+        GameSetup.GS.setView();
+    }
 }

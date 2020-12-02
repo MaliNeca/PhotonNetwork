@@ -6855,6 +6855,9 @@ MonoBehaviour:
   playerTwoNumbers: {fileID: 1741632063}
   playerThreeNumbers: {fileID: 1821279110}
   playerFourNumbers: {fileID: 705398808}
+  numbersSet: 0
+  showAll: 0
+  PV: {fileID: 0}
   sheet: {fileID: 1269893835}
   swapButton: {fileID: 274865556}
 --- !u!4 &1239339956
@@ -9699,7 +9702,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Button
+  m_Text: SWAP
 --- !u!222 &2041237453
 CanvasRenderer:
   m_ObjectHideFlags: 0

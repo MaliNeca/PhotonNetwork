@@ -46,6 +46,8 @@ MonoBehaviour:
   - RPC_SentTeam
   - PlaceItemSync
   - RPC_GetList
+  - RPC_SetView
+  - RPC_GameSetupSetVisible
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
