@@ -1,7 +1,5 @@
 ﻿using Photon.Pun;
 using Photon.Realtime;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -35,6 +33,7 @@ public class PhotonRoomCustomMatch : MonoBehaviourPunCallbacks, IInRoomCallbacks
     public Transform playersPanel;
     public GameObject playerListingPrefab;
     public GameObject startButton;
+    public GameObject copyButton;
 
     public GameObject lobbyController;
 
@@ -129,6 +128,7 @@ public class PhotonRoomCustomMatch : MonoBehaviourPunCallbacks, IInRoomCallbacks
         if (PhotonNetwork.IsMasterClient)
         {
             startButton.SetActive(true);
+            copyButton.SetActive(true);
         }
         //clear current player list
         ClearPlayerListings();
@@ -285,5 +285,23 @@ public class PhotonRoomCustomMatch : MonoBehaviourPunCallbacks, IInRoomCallbacks
         playersInRoom--;
         ClearPlayerListings();
         ListAllPlayers();
+    }
+
+    public void OnCopyButtonClicked()
+    {
+
+        PhotonNetwork.CurrentRoom.Name.CopyToClipboard();
+        Debug.Log(PhotonNetwork.CurrentRoom.Name);
+    }
+}
+
+public static class ClipboardExtension
+{
+    /// <summary>
+    /// Puts the string into the Clipboard.
+    /// </summary>
+    public static void CopyToClipboard(this string str)
+    {
+        GUIUtility.systemCopyBuffer = str;
     }
 }

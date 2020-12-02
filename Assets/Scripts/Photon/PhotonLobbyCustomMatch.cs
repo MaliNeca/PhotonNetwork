@@ -2,21 +2,25 @@
 using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
-{ 
+{
     //lobby instance
     public static PhotonLobbyCustomMatch lobby;
 
     //button for start game
     public string roomName;
+    public string roomCode;
     public int roomSize;
     public GameObject roomListingPrefab;
     public Transform roomsPanel;
 
     public List<RoomInfo> roomListings;
 
+    private static System.Random random = new System.Random();
+    private int roomCodeLength = 10; 
     private void Awake()
     {
         //creates the singleton, lives withing the Main menu scene.
@@ -27,7 +31,7 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
     void Start()
     {
         //Connect to Master photon server
-       
+
         PhotonNetwork.ConnectUsingSettings();
         roomListings = new List<RoomInfo>();
 
@@ -88,12 +92,12 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
 
     void ListRoom(RoomInfo newRoom)
     {
-        if(newRoom.IsOpen && newRoom.IsVisible)
+        if (newRoom.IsOpen && newRoom.IsVisible)
         {
             GameObject tempListing = Instantiate(roomListingPrefab, roomsPanel);
             RoomButton tempButton = tempListing.GetComponent<RoomButton>();
 
-            tempButton.roomName = newRoom.Name;
+            tempButton.roomName = newRoom.Name.Substring(roomCodeLength);
             tempButton.roomSize = newRoom.MaxPlayers;
             tempButton.SetRoom();
         }
@@ -103,7 +107,7 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
     public void CreateRoom()
     {
         Debug.Log("Trying to create a new room");
-        RoomOptions roomOps = new RoomOptions() { IsVisible = true, IsOpen = true, MaxPlayers =(byte) roomSize };
+        RoomOptions roomOps = new RoomOptions() { IsVisible = true, IsOpen = true, MaxPlayers = (byte)roomSize };
         PhotonNetwork.CreateRoom(roomName, roomOps);
     }
 
@@ -116,13 +120,16 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     //when user change room name
     public void OnRoomNameChanged(string nameIn)
     {
-        roomName = nameIn;
+
+        roomName = RandomString(roomCodeLength);
+        roomName = roomName + nameIn;
+        //roomName = nameIn;
     }
 
     //when user change size
@@ -139,4 +146,29 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
             PhotonNetwork.JoinLobby();
         }
     }
+
+    public static string RandomString(int length)
+    {
+        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        return new string(Enumerable.Repeat(chars, length)
+          .Select(s => s[random.Next(s.Length)]).ToArray());
+    }
+
+    public void OnRoomCodeChanged(string nameIn)
+    {
+
+        roomCode = nameIn;
+       
+        //roomName = nameIn;
+    }
+
+    public void JoinRoomOnClick()
+    {
+        if(roomCode.Length != 0)
+        {
+            PhotonNetwork.JoinRoom(roomCode);
+        }
+    }
 }
+
+
