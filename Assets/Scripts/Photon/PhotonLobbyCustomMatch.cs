@@ -27,6 +27,8 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
     private static int minRoomSize = 5;
     private static int maxRoomSize = 8;
 
+
+
     private void Awake()
     {
         //creates the singleton, lives withing the Main menu scene.
@@ -55,6 +57,11 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
         PhotonNetwork.NickName = "Player " + Random.Range(0, 1000);
     }
 
+    public override void OnDisconnected(DisconnectCause cause)
+    {
+        base.OnDisconnected(cause);
+        Debug.Log("Player has disconntected from the Photon master server");
+    }
     //changes on available room on lobby
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
@@ -105,7 +112,7 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
             GameObject tempListing = Instantiate(roomListingPrefab, roomsPanel);
             RoomButton tempButton = tempListing.GetComponent<RoomButton>();
 
-            tempButton.roomName = newRoom.Name.Substring(roomCodeLength); 
+            tempButton.roomName = newRoom.Name.Substring(roomCodeLength);
             tempButton.roomSize = newRoom.MaxPlayers;
             tempButton.SetRoom();
         }
@@ -118,7 +125,7 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
         //check default room size
         if (roomSize < minRoomSize || roomSize > maxRoomSize)
         {
-            Debug.LogWarning("Room size must be between 5 and 8 players including teacher");
+            Debug.LogWarning("Room size must be between 4 and 7 players including teacher");
             return;
         }
         RoomOptions roomOps = new RoomOptions() { IsVisible = true, IsOpen = true, MaxPlayers = (byte)roomSize };
@@ -141,7 +148,10 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
     //when user change size
     public void OnRoomSizeChanged(string sizeIn)
     {
-        roomSize = int.Parse(sizeIn);
+        //only number of clients add teacher
+        int temp = int.Parse(sizeIn);
+        temp++;
+        roomSize = temp;
     }
 
     //when user click join lobby, disabled for now
@@ -175,6 +185,30 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
     {
         roomCode = nameIn;
     }
+
+    public void OnPlayerNameChanged(string nameIn)
+    {
+        PhotonNetwork.NickName = nameIn;
+    }
+
+    public void OnTeacherNameChanged(string nameIn)
+    {
+        PhotonNetwork.NickName = nameIn;
+    }
+
+    public void connectToMaster()
+    {
+        //Connect to Master photon server
+        PhotonNetwork.ConnectUsingSettings();
+        roomListings = new List<RoomInfo>();
+    }
+
+    public void disconnectFromMaster()
+    {
+        //Disconnection current player
+        PhotonNetwork.Disconnect();
+    }
+
 }
 
 

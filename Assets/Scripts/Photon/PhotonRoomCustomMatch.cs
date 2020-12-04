@@ -34,7 +34,7 @@ public class PhotonRoomCustomMatch : MonoBehaviourPunCallbacks, IInRoomCallbacks
     public GameObject playerListingPrefab;
     public GameObject startButton;
     public GameObject copyButton;
-
+    public Text roomCode;
     public GameObject lobbyController;
 
 
@@ -124,6 +124,8 @@ public class PhotonRoomCustomMatch : MonoBehaviourPunCallbacks, IInRoomCallbacks
         {
             startButton.SetActive(true);
             copyButton.SetActive(true);
+            roomCode.gameObject.SetActive(true);
+            roomCode.text = PhotonNetwork.CurrentRoom.Name;
         }
         //clear current player list
         ClearPlayerListings();

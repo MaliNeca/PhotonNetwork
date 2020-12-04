@@ -1,6 +1,7 @@
 ﻿using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -27,6 +28,9 @@ public class GameSetup : MonoBehaviour
     public GameObject playerFiveNumbers;
     public GameObject playerSixNumbers;
     public GameObject playerSevenNumbers;
+
+    //player names
+    public GameObject playersName;
 
     public bool numbersSet = false;
 
@@ -98,6 +102,16 @@ public class GameSetup : MonoBehaviour
                     break;
 
             }
+
+            //players name
+            for(int i = 0; i < PhotonNetwork.CurrentRoom.MaxPlayers - 1; i++)
+            {
+                playersName.gameObject.transform.GetChild(i).gameObject.SetActive(true);
+                //i+2 bcs player id start with 1 and master id is 1
+                playersName.gameObject.transform.GetChild(i).GetComponent<TextMeshProUGUI>().text = PhotonNetwork.CurrentRoom.GetPlayer(i + 2) != null ? PhotonNetwork.CurrentRoom.GetPlayer(i + 2).NickName : "";    
+            }
+           
+
 
             //client view set alpha
             playerNumbers.transform.GetComponent<CanvasGroup>().alpha = 0;
