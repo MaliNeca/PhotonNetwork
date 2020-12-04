@@ -114,3 +114,4 @@ MonoBehaviour:
   empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 1}
   full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0.5176471}
   unlimitedSource: 0
+  playerName: {fileID: 0}

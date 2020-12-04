@@ -4,6 +4,8 @@ using UnityEngine.EventSystems;
 using System.Collections.Generic;
 using System.Collections;
 using System;
+using TMPro;
+using Photon.Pun;
 
 /// <summary>
 /// Drag and Drop item.
@@ -14,6 +16,7 @@ public class DragAndDropItem : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 {
     public bool dragDisabled = false;                                       // Drag start global disable
     public static DragAndDropItem draggedItem;                                      // Item that is dragged now
+    public static DragAndDropItem lastDraggedItem;
     public static GameObject icon;                                                  // Icon of dragged item
     public static DragAndDropCell sourceCell;                                       // From this cell dragged item is
 
@@ -25,6 +28,7 @@ public class DragAndDropItem : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     private static string canvasName = "DragAndDropCanvas";                         // Name of canvas
     private static int canvasSortOrder = 100;                                       // Sort order for canvas
 
+    public GameObject playerName;
     /// <summary>
     /// Awake this instance.
     /// </summary>
@@ -49,7 +53,7 @@ public class DragAndDropItem : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         {
             sourceCell = GetCell();                                                 // Remember source cell
             draggedItem = this;                                                     // Set as dragged item
-                                                                                    // Create item's icon
+            lastDraggedItem = draggedItem;                                          // Create item's icon
             icon = new GameObject();
             icon.transform.SetParent(canvas.transform);
             icon.name = "Icon";
@@ -91,7 +95,44 @@ public class DragAndDropItem : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     /// <param name="eventData"></param>
     public void OnEndDrag(PointerEventData eventData)
     {
+        /*
+                playerName.SetActive(true);*/
+        //draggedItem.transform.GetComponentInChildren<TextMeshProUGUI>().text = PhotonNetwork.LocalPlayer.NickName;
+        //setPlayerName(PhotonNetwork.LocalPlayer.NickName);
+        /*ExitGames.Client.Photon.Hashtable t = new ExitGames.Client.Photon.Hashtable();
+        t.Add("playerNamee", PhotonNetwork.LocalPlayer.NickName);
+        Debug.LogWarning(PhotonNetwork.LocalPlayer.NickName);
+        //t.Add("playerName", (string)PhotonNetwork.CurrentRoom.CustomProperties["playerName"]);
+
+        PhotonNetwork.CurrentRoom.SetCustomProperties(t);
+       
+        Debug.LogWarning(PhotonNetwork.CurrentRoom.CustomProperties["playerNamee"]);*/
+
+        //draggedItem.transform.GetComponentInChildren<TextMeshProUGUI>().text = PhotonNetwork.LocalPlayer.NickName;
+        setPlayerName(PhotonNetwork.LocalPlayer.NickName);
         ResetConditions();
+    }
+
+    void setPlayerName(string name)
+    {
+        int itemToSend = draggedItem.GetComponent<PhotonView>().ViewID;
+        GetComponent<PhotonView>().RPC("PlaceNameSync", RpcTarget.AllBuffered, itemToSend, PhotonNetwork.LocalPlayer.NickName);
+    }
+
+    [PunRPC]
+    void PlaceNameSync(int _item, string name)
+    {
+        Debug.LogWarning("Pozvalo se" + name + _item);
+        DragAndDropItem item = null;
+        Debug.Log("ITEM: " + _item);
+        foreach (PhotonView dg in FindObjectsOfType<PhotonView>())
+        {
+            if (dg.ViewID == _item)
+            {
+                item = dg.GetComponent<DragAndDropItem>();
+            }
+        }
+        item.transform.GetComponentInChildren<TextMeshProUGUI>().text = name;
     }
 
     /// <summary>

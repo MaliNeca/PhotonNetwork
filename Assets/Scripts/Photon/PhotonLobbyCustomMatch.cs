@@ -128,7 +128,10 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
             Debug.LogWarning("Room size must be between 4 and 7 players including teacher");
             return;
         }
-        RoomOptions roomOps = new RoomOptions() { IsVisible = true, IsOpen = true, MaxPlayers = (byte)roomSize };
+        RoomOptions roomOps = new RoomOptions() { IsVisible = true, IsOpen = true, MaxPlayers = (byte)roomSize};
+        /*ExitGames.Client.Photon.Hashtable t = new ExitGames.Client.Photon.Hashtable();
+        t.Add("playerName", "NE");
+        roomOps.CustomRoomProperties = t;*/
         PhotonNetwork.CreateRoom(roomName, roomOps);
     }
 

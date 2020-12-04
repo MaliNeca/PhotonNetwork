@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections;
 using Photon.Pun;
+using TMPro;
 /// <summary>
 /// Every item's cell must contain this script
 /// </summary>
@@ -44,6 +45,7 @@ public class DragAndDropCell : MonoBehaviour, IDropHandler
 
 	private DragAndDropItem myDadItem;										// Item of this DaD cell
 
+    public GameObject playerName;
     void OnEnable()
     {
         DragAndDropItem.OnItemDragStartEvent += OnAnyItemDragStart;         // Handle any item drag start
@@ -92,6 +94,7 @@ public class DragAndDropCell : MonoBehaviour, IDropHandler
 		if (myDadItem != null)
         {
 			myDadItem.MakeRaycast(true);                                  	// Enable item's raycast
+
         }
 		UpdateBackgroundState();
     }
@@ -141,12 +144,13 @@ public class DragAndDropCell : MonoBehaviour, IDropHandler
                                             }
                                             else
                                             {
-												PlaceItem(item);            // Delete old item and place dropped item into this cell
+                                               
+                                                PlaceItem(item);            // Delete old item and place dropped item into this cell
                                             }
                                         }
                                         else
                                         {
-											PlaceItem(item);                // Place dropped item into this empty cell
+                                            PlaceItem(item);                // Place dropped item into this empty cell
                                         }
                                     }
                                     break;
@@ -201,9 +205,22 @@ public class DragAndDropCell : MonoBehaviour, IDropHandler
 	/// <param name="item">Item.</param>
 	private void PlaceItem(DragAndDropItem item)
 	{
+        
         int itemToSend = item.GetComponent<PhotonView>().ViewID;
+
         GetComponent<PhotonView>().RPC("PlaceItemSync", RpcTarget.AllBuffered, itemToSend);
     }
+
+    /*public void setPlayerName(string name)
+    {
+        GetComponent<PhotonView>().RPC("PlaceNameSync", RpcTarget.AllBuffered, name);
+    }
+
+    [PunRPC]
+    void PlaceNameSync(string name)
+    {
+        myDadItem.transform.GetComponentInChildren<TextMeshProUGUI>().text = name;
+    }*/
 
     [PunRPC]
     void PlaceItemSync(int _item)
@@ -235,6 +252,11 @@ public class DragAndDropCell : MonoBehaviour, IDropHandler
             item.transform.localPosition = Vector3.zero;
             item.MakeRaycast(true);
             myDadItem = item;
+            //ExitGames.Client.Photon.Hashtable t = PhotonNetwork.CurrentRoom.CustomProperties;
+
+           
+           // Debug.LogWarning(PhotonNetwork.CurrentRoom.CustomProperties["playerName"]);
+            myDadItem.gameObject.transform.GetChild(1).gameObject.SetActive(true);
         }
         UpdateBackgroundState();
     }
@@ -318,6 +340,12 @@ public class DragAndDropCell : MonoBehaviour, IDropHandler
 		Image bg = GetComponent<Image>();
 		if (bg != null)
 		{
+            /*//ovde
+            if(myDadItem != null)
+            {
+                myDadItem.gameObject.transform.GetChild(1).gameObject.SetActive(true);
+               // myDadItem.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = PhotonNetwork.LocalPlayer.NickName;
+            }*/
 			bg.color = myDadItem != null ? full : empty;
 		}
 	}
