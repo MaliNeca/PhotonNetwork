@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+
 public class PhotonRoomCustomMatch : MonoBehaviourPunCallbacks, IInRoomCallbacks
 {
     public static PhotonRoomCustomMatch room;
@@ -288,7 +289,11 @@ public class PhotonRoomCustomMatch : MonoBehaviourPunCallbacks, IInRoomCallbacks
     //button Copy clicked
     public void OnCopyButtonClicked()
     {
-        PhotonNetwork.CurrentRoom.Name.CopyToClipboard();
+        //PhotonNetwork.CurrentRoom.Name.CopyToClipboard();
+       
+        WebGLCopyAndPaste webGLCopy = new WebGLCopyAndPaste();
+        webGLCopy.GetClipboard(PhotonNetwork.CurrentRoom.Name);
+        
         Debug.Log(PhotonNetwork.CurrentRoom.Name);
     }
 }
@@ -299,6 +304,7 @@ public static class ClipboardExtension
     //copy room Code to clipboard
     public static void CopyToClipboard(this string str)
     {
+        
         GUIUtility.systemCopyBuffer = str;
     }
 }

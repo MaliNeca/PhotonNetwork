@@ -65,6 +65,8 @@ public class WebGLCopyAndPasteAPI {
 }
 
 public class WebGLCopyAndPaste : MonoBehaviour {
+
+
   void Start()
   {
     if (!Application.isEditor) {
