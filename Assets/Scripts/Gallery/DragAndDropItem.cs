@@ -14,6 +14,8 @@ using Photon.Pun;
 [Serializable]
 public class DragAndDropItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
+
+    public static DragAndDropItem DADInstance;
     public bool dragDisabled = false;                                       // Drag start global disable
     public static DragAndDropItem draggedItem;                                      // Item that is dragged now
     public static DragAndDropItem lastDraggedItem;
@@ -41,6 +43,7 @@ public class DragAndDropItem : MonoBehaviour, IBeginDragHandler, IDragHandler, I
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
             canvas.sortingOrder = canvasSortOrder;
         }
+      
     }
 
     /// <summary>
@@ -72,6 +75,8 @@ public class DragAndDropItem : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
             if (OnItemDragStartEvent != null)
             {
+                //sourceCell.cellType = DragAndDropCell.CellType.DropOnly;
+
                 OnItemDragStartEvent(this);                                         // Notify all items about drag start for raycast disabling
             }
         }
@@ -95,36 +100,25 @@ public class DragAndDropItem : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     /// <param name="eventData"></param>
     public void OnEndDrag(PointerEventData eventData)
     {
-        /*
-                playerName.SetActive(true);*/
-        //draggedItem.transform.GetComponentInChildren<TextMeshProUGUI>().text = PhotonNetwork.LocalPlayer.NickName;
-        //setPlayerName(PhotonNetwork.LocalPlayer.NickName);
-        /*ExitGames.Client.Photon.Hashtable t = new ExitGames.Client.Photon.Hashtable();
-        t.Add("playerNamee", PhotonNetwork.LocalPlayer.NickName);
-        Debug.LogWarning(PhotonNetwork.LocalPlayer.NickName);
-        //t.Add("playerName", (string)PhotonNetwork.CurrentRoom.CustomProperties["playerName"]);
-
-        PhotonNetwork.CurrentRoom.SetCustomProperties(t);
-       
-        Debug.LogWarning(PhotonNetwork.CurrentRoom.CustomProperties["playerNamee"]);*/
-
-        //draggedItem.transform.GetComponentInChildren<TextMeshProUGUI>().text = PhotonNetwork.LocalPlayer.NickName;
         setPlayerName(PhotonNetwork.LocalPlayer.NickName);
+
         ResetConditions();
     }
 
-    void setPlayerName(string name)
+    public void setPlayerName(string name)
     {
         int itemToSend = draggedItem.GetComponent<PhotonView>().ViewID;
         GetComponent<PhotonView>().RPC("PlaceNameSync", RpcTarget.AllBuffered, itemToSend, PhotonNetwork.LocalPlayer.NickName);
     }
 
+   
+
     [PunRPC]
     void PlaceNameSync(int _item, string name)
     {
-        Debug.LogWarning("Pozvalo se" + name + _item);
+       
         DragAndDropItem item = null;
-        Debug.Log("ITEM: " + _item);
+   
         foreach (PhotonView dg in FindObjectsOfType<PhotonView>())
         {
             if (dg.ViewID == _item)
@@ -132,7 +126,16 @@ public class DragAndDropItem : MonoBehaviour, IBeginDragHandler, IDragHandler, I
                 item = dg.GetComponent<DragAndDropItem>();
             }
         }
-        item.transform.GetComponentInChildren<TextMeshProUGUI>().text = name;
+      
+        if (item != null)
+        {
+            if (item.transform.parent.parent.CompareTag("Sheet"))
+            {
+                item.transform.GetComponentInChildren<TextMeshProUGUI>().text = name;
+
+            }
+        }
+       
     }
 
     /// <summary>

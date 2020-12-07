@@ -36,6 +36,7 @@ public class PhotonRoomCustomMatch : MonoBehaviourPunCallbacks, IInRoomCallbacks
     public GameObject startButton;
     public GameObject copyButton;
     public Text roomCode;
+    public InputField roomCodeField;
     public GameObject lobbyController;
 
 
@@ -124,9 +125,11 @@ public class PhotonRoomCustomMatch : MonoBehaviourPunCallbacks, IInRoomCallbacks
         if (PhotonNetwork.IsMasterClient)
         {
             startButton.SetActive(true);
-            copyButton.SetActive(true);
-            roomCode.gameObject.SetActive(true);
+            //copyButton.SetActive(true);
+            //roomCode.gameObject.SetActive(true);
             roomCode.text = PhotonNetwork.CurrentRoom.Name;
+            roomCodeField.gameObject.SetActive(true);
+            roomCodeField.text = PhotonNetwork.CurrentRoom.Name;
         }
         //clear current player list
         ClearPlayerListings();
@@ -292,7 +295,9 @@ public class PhotonRoomCustomMatch : MonoBehaviourPunCallbacks, IInRoomCallbacks
         //PhotonNetwork.CurrentRoom.Name.CopyToClipboard();
        
         WebGLCopyAndPaste webGLCopy = new WebGLCopyAndPaste();
-        webGLCopy.GetClipboard(PhotonNetwork.CurrentRoom.Name);
+        webGLCopy.ReceivePaste(PhotonNetwork.CurrentRoom.Name);
+        webGLCopy.GetClipboard("C");
+        //webGLCopy.ReceivePaste(PhotonNetwork.CurrentRoom.Name);
         
         Debug.Log(PhotonNetwork.CurrentRoom.Name);
     }
@@ -304,7 +309,9 @@ public static class ClipboardExtension
     //copy room Code to clipboard
     public static void CopyToClipboard(this string str)
     {
-        
         GUIUtility.systemCopyBuffer = str;
     }
 }
+
+
+

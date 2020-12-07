@@ -49,6 +49,7 @@ MonoBehaviour:
   - RPC_SetView
   - RPC_GameSetupSetVisible
   - PlaceNameSync
+  - RPC_CellTypeSync
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

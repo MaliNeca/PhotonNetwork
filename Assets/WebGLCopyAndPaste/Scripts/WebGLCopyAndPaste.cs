@@ -64,7 +64,7 @@ public class WebGLCopyAndPasteAPI {
     }
 }
 
-public class WebGLCopyAndPaste : MonoBehaviour {
+public class WebGLCopyAndPaste :MonoBehaviour {
 
 
   void Start()
@@ -80,12 +80,14 @@ public class WebGLCopyAndPaste : MonoBehaviour {
     string naturalKey = "^" + baseKey;
 
     var currentObj = EventSystem.current.currentSelectedGameObject;
+       
     if (currentObj == null) {
-      return;
+           return;
     }
     {
       var input = currentObj.GetComponent<UnityEngine.UI.InputField>();
       if (input != null) {
+                Debug.Log(naturalKey);
         // I don't know what's going on here. The code in InputField
         // is looking for ctrl-c but that fails on Mac Chrome/Firefox
         input.ProcessEvent(Event.KeyboardEvent(naturalKey));
