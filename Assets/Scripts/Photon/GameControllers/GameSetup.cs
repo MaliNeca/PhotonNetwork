@@ -59,9 +59,9 @@ public class GameSetup : MonoBehaviour
         if (PhotonNetwork.IsMasterClient)
         {
             //set Sheet view position
-            sheet.transform.SetPositionAndRotation(new Vector3(610, -190, 0), sheet.transform.rotation);
-            sheet.transform.GetComponent<RectTransform>().sizeDelta = new Vector2(700, 700);
-            sheet.transform.GetComponent<GridLayoutGroup>().cellSize = new Vector2(150, 150);
+            sheet.transform.SetPositionAndRotation(new Vector3(-367, 270, 0), sheet.transform.rotation);
+            sheet.transform.GetComponent<RectTransform>().sizeDelta = new Vector2(750, 750);
+            sheet.transform.GetComponent<GridLayoutGroup>().cellSize = new Vector2(100, 100);
 
             //set objects active
             switch (PhotonNetwork.CurrentRoom.MaxPlayers)
@@ -108,7 +108,7 @@ public class GameSetup : MonoBehaviour
             {
                 playersName.gameObject.transform.GetChild(i).gameObject.SetActive(true);
                 //i+2 bcs player id start with 1 and master id is 1
-                playersName.gameObject.transform.GetChild(i).GetComponent<TextMeshProUGUI>().text = PhotonNetwork.CurrentRoom.GetPlayer(i + 2) != null ? PhotonNetwork.CurrentRoom.GetPlayer(i + 2).NickName : "";    
+                playersName.gameObject.transform.GetChild(i).GetChild(0).GetComponent<TextMeshProUGUI>().text = PhotonNetwork.CurrentRoom.GetPlayer(i + 2) != null ? PhotonNetwork.CurrentRoom.GetPlayer(i + 2).NickName : "";    
             }
            
 
