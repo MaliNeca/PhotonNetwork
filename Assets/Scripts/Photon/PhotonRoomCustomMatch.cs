@@ -18,6 +18,7 @@ public class PhotonRoomCustomMatch : MonoBehaviourPunCallbacks, IInRoomCallbacks
     private Player[] photonPlayers;
     public int playersInRoom;
     public int myNumberInRoom;
+    public int maxPlayers;
 
     public int playerInGame;
 
@@ -125,6 +126,7 @@ public class PhotonRoomCustomMatch : MonoBehaviourPunCallbacks, IInRoomCallbacks
         if (PhotonNetwork.IsMasterClient)
         {
             startButton.SetActive(true);
+            //copy webgl doesnt work propertly so disable copy button
             //copyButton.SetActive(true);
             //roomCode.gameObject.SetActive(true);
             roomCode.text = PhotonNetwork.CurrentRoom.Name;

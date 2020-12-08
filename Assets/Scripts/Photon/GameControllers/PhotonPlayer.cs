@@ -13,8 +13,7 @@ public class PhotonPlayer : MonoBehaviour
 
     public int myTeam;
 
-    //random list
-    //public int[] myRandomNumbers = new int[4];
+   
     public List<int> AllRandomNumbers = new List<int>();
 
     //create Random generator and binary formatter
@@ -26,6 +25,8 @@ public class PhotonPlayer : MonoBehaviour
     public bool getTeam = false;
     public bool founded = false;
 
+    private static int maxPlayer;
+
     void Awake()
     {
         PhotonPlayer.player = this;
@@ -35,15 +36,15 @@ public class PhotonPlayer : MonoBehaviour
     void Start()
     {
         PV = GetComponent<PhotonView>();
-
+        
         if (PhotonNetwork.IsMasterClient)
         {
             if (PV.IsMine)
             {
                 //randomize list
-                //Debug.Log("max player in room" + PhotonNetwork.CurrentRoom.MaxPlayers);
                 while (true)
                 {
+                    //list size is maxPlayers * 4
                     int num = rng.Next(0, (PhotonNetwork.CurrentRoom.MaxPlayers - 1) * 4);
                     if (!AllRandomNumbers.Contains(num))
                     {
