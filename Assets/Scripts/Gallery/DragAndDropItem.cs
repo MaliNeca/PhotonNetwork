@@ -107,8 +107,12 @@ public class DragAndDropItem : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     public void setPlayerName(string name)
     {
-        int itemToSend = draggedItem.GetComponent<PhotonView>().ViewID;
-        GetComponent<PhotonView>().RPC("PlaceNameSync", RpcTarget.AllBuffered, itemToSend, PhotonNetwork.LocalPlayer.NickName);
+        if (draggedItem != null)
+        {
+            int itemToSend = draggedItem.GetComponent<PhotonView>().ViewID;
+            GetComponent<PhotonView>().RPC("PlaceNameSync", RpcTarget.AllBuffered, itemToSend, PhotonNetwork.LocalPlayer.NickName);
+
+        }
     }
 
    
