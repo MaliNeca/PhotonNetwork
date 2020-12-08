@@ -25,7 +25,7 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
 
     //room settings
     private static int minRoomSize = 5;
-    private static int maxRoomSize = 8;
+    private static int maxRoomSize = 11;
 
 
 
@@ -125,7 +125,7 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
         //check default room size
         if (roomSize < minRoomSize || roomSize > maxRoomSize)
         {
-            Debug.LogWarning("Room size must be between 4 and 7 players including teacher");
+            Debug.LogWarning("Room size must be between 4 and 10 players including teacher");
             return;
         }
         RoomOptions roomOps = new RoomOptions() { IsVisible = true, IsOpen = true, MaxPlayers = (byte)roomSize};
