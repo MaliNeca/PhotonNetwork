@@ -90,7 +90,6 @@ public class DragAndDropCell : MonoBehaviour, IDropHandler
     /// <param name="item"> dragged item </param>
     private void OnAnyItemDragEnd(DragAndDropItem item)
     {
-        //item.GetCell().cellType = CellType.DragOnly;
 		UpdateMyItem();
 		if (myDadItem != null)
         {
@@ -110,7 +109,6 @@ public class DragAndDropCell : MonoBehaviour, IDropHandler
         {
             DragAndDropItem item = DragAndDropItem.draggedItem;
             DragAndDropCell sourceCell = DragAndDropItem.sourceCell;
-
             if (DragAndDropItem.icon.activeSelf == true)                    // If icon inactive do not need to drop item into cell
             {
                 if ((item != null) && (sourceCell != this))
@@ -175,13 +173,11 @@ public class DragAndDropCell : MonoBehaviour, IDropHandler
                             desc.item = item;
                             desc.sourceCell = sourceCell;
                             desc.destinationCell = this;
-
-                           
                             SendRequest(desc);                              // Send drop request
                             StartCoroutine(NotifyOnDragEnd(desc));          // Send notification after drop will be finished
                             if (desc.permission == true)                    // If drop permitted by application
                             {
-                               PlaceItem(item);                            // Place dropped item in this cell
+								PlaceItem(item);                            // Place dropped item in this cell
                             }
                             break;
                         default:
@@ -211,8 +207,20 @@ public class DragAndDropCell : MonoBehaviour, IDropHandler
 	{
         
         int itemToSend = item.GetComponent<PhotonView>().ViewID;
+
         GetComponent<PhotonView>().RPC("PlaceItemSync", RpcTarget.AllBuffered, itemToSend);
     }
+
+    /*public void setPlayerName(string name)
+    {
+        GetComponent<PhotonView>().RPC("PlaceNameSync", RpcTarget.AllBuffered, name);
+    }
+
+    [PunRPC]
+    void PlaceNameSync(string name)
+    {
+        myDadItem.transform.GetComponentInChildren<TextMeshProUGUI>().text = name;
+    }*/
 
     [PunRPC]
     void PlaceItemSync(int _item)
@@ -228,12 +236,9 @@ public class DragAndDropCell : MonoBehaviour, IDropHandler
         }
         if (item != null)
         {
-            
-            Debug.LogWarning("parent 1: " +item.transform.parent.name);
             DestroyItem();                                              // Remove current item from this cell
             myDadItem = null;
             DragAndDropCell cell = item.GetComponentInParent<DragAndDropCell>();
-
             if (cell != null)
             {
                 if (cell.unlimitedSource == true)
@@ -242,53 +247,16 @@ public class DragAndDropCell : MonoBehaviour, IDropHandler
                     item = Instantiate(item);                               // Clone item from source cell
                     item.name = itemName;
                 }
-                Debug.LogWarning("parent 2: " + cell.name);
-                Debug.LogWarning("evo ga ovde drag");
-
-               
-                //set source cell type
-                if (cell.transform.parent.gameObject.CompareTag("Sheet"))
-                {
-                    Debug.LogWarning("da");
-                    cell.cellType = DragAndDropCell.CellType.DropOnly;
-
-                }
-                else
-                {
-                    cell.cellType = DragAndDropCell.CellType.Swap;
-                }
-
-
-
-                
-                
             }
             item.transform.SetParent(transform, false);
             item.transform.localPosition = Vector3.zero;
             item.MakeRaycast(true);
-
-            Debug.LogWarning("parent 3: " + item.transform.parent.name);
-           
-            //set destination cell type
-            item.GetComponentInParent<DragAndDropCell>().cellType = CellType.DragOnly;
-
-            
-
             myDadItem = item;
-            //enable playerName on image
-            if (myDadItem.GetComponentInParent<DragAndDropCell>().transform.parent.gameObject.CompareTag("Sheet"))
-            {
-                myDadItem.gameObject.transform.GetChild(1).gameObject.SetActive(true);
+            //ExitGames.Client.Photon.Hashtable t = PhotonNetwork.CurrentRoom.CustomProperties;
 
-            }
-            else
-            {
-                //disable
-                myDadItem.gameObject.transform.GetChild(1).gameObject.SetActive(false);
-
-            }
-
-            //myDadItem.gameObject.transform.GetChild(1).gameObject.SetActive(true);
+           
+           // Debug.LogWarning(PhotonNetwork.CurrentRoom.CustomProperties["playerName"]);
+            myDadItem.gameObject.transform.GetChild(1).gameObject.SetActive(true);
         }
         UpdateBackgroundState();
     }

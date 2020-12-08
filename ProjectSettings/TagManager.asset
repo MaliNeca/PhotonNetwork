@@ -7,7 +7,6 @@ TagManager:
   - Avatar
   - Teacher
   - Student
-  - Sheet
   layers:
   - Default
   - TransparentFX
