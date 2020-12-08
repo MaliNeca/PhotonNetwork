@@ -19,8 +19,8 @@ public class GameSetup : MonoBehaviour
     public List<int> allNumbers = new List<int>();
 
     //master view
-    public List<GameObject> playerNumbersList = new List<GameObject>();
     public GameObject playerNumbers;
+    public List<GameObject> playerNumbersList = new List<GameObject>();
     public GameObject playerOneNumbers;
     public GameObject playerTwoNumbers;
     public GameObject playerThreeNumbers;
@@ -62,43 +62,24 @@ public class GameSetup : MonoBehaviour
             sheet.transform.SetPositionAndRotation(new Vector3(-367, 270, 0), sheet.transform.rotation);
             sheet.transform.GetComponent<RectTransform>().sizeDelta = new Vector2(750, 750);
             sheet.transform.GetComponent<GridLayoutGroup>().cellSize = new Vector2(100, 100);
-            playerOneNumbers.transform.SetPositionAndRotation(new Vector3(-760, 312, 0), playerOneNumbers.transform.rotation);
-            playerTwoNumbers.transform.SetPositionAndRotation(new Vector3(-360, 312, 0), playerTwoNumbers.transform.rotation);
-            playerThreeNumbers.transform.SetPositionAndRotation(new Vector3(40, 312, 0), playerThreeNumbers.transform.rotation);
-            playerFourNumbers.transform.SetPositionAndRotation(new Vector3(440, 312, 0), playerFourNumbers.transform.rotation);
-            playerFiveNumbers.transform.SetPositionAndRotation(new Vector3(-760, -350, 0), playerFiveNumbers.transform.rotation);
-            playerSixNumbers.transform.SetPositionAndRotation(new Vector3(-360, -350, 0), playerSixNumbers.transform.rotation);
-            playerSevenNumbers.transform.SetPositionAndRotation(new Vector3(40, -350, 0), playerSevenNumbers.transform.rotation);
-
 
             //set objects active
             switch (PhotonNetwork.CurrentRoom.MaxPlayers)
             {
                 //4 player + master
                 case 5:
-                    playerOneNumbers.transform.GetComponent<CanvasGroup>().alpha = 1;
-                    playerTwoNumbers.transform.GetComponent<CanvasGroup>().alpha = 1;
-                    playerThreeNumbers.transform.GetComponent<CanvasGroup>().alpha = 1;
-                    playerFourNumbers.transform.GetComponent<CanvasGroup>().alpha = 1;
-
-                    /* playerOneNumbers.gameObject.SetActive(true);
-                     playerTwoNumbers.gameObject.SetActive(true);
-                     playerThreeNumbers.gameObject.SetActive(true);
-                     playerFourNumbers.gameObject.SetActive(true);*/
+                    playerOneNumbers.gameObject.SetActive(true);
+                    playerTwoNumbers.gameObject.SetActive(true);
+                    playerThreeNumbers.gameObject.SetActive(true);
+                    playerFourNumbers.gameObject.SetActive(true);
                     break;
                 //5 player + master
                 case 6:
-                    playerOneNumbers.transform.GetComponent<CanvasGroup>().alpha = 1;
-                    playerTwoNumbers.transform.GetComponent<CanvasGroup>().alpha = 1;
-                    playerThreeNumbers.transform.GetComponent<CanvasGroup>().alpha = 1;
-                    playerFourNumbers.transform.GetComponent<CanvasGroup>().alpha = 1;
-                    playerFiveNumbers.transform.GetComponent<CanvasGroup>().alpha = 1;
-
-                    /* playerOneNumbers.gameObject.SetActive(true);
-                     playerTwoNumbers.gameObject.SetActive(true);
-                     playerThreeNumbers.gameObject.SetActive(true);
-                     playerFourNumbers.gameObject.SetActive(true);
-                     playerFiveNumbers.gameObject.SetActive(true);*/
+                    playerOneNumbers.gameObject.SetActive(true);
+                    playerTwoNumbers.gameObject.SetActive(true);
+                    playerThreeNumbers.gameObject.SetActive(true);
+                    playerFourNumbers.gameObject.SetActive(true);
+                    playerFiveNumbers.gameObject.SetActive(true);
                     break;
                 //6 player + master
                 case 7:
@@ -123,13 +104,13 @@ public class GameSetup : MonoBehaviour
             }
 
             //players name
-            for (int i = 0; i < PhotonNetwork.CurrentRoom.MaxPlayers - 1; i++)
+            for(int i = 0; i < PhotonNetwork.CurrentRoom.MaxPlayers - 1; i++)
             {
                 playersName.gameObject.transform.GetChild(i).gameObject.SetActive(true);
                 //i+2 bcs player id start with 1 and master id is 1
-                playersName.gameObject.transform.GetChild(i).GetChild(0).GetComponent<TextMeshProUGUI>().text = PhotonNetwork.CurrentRoom.GetPlayer(i + 2) != null ? PhotonNetwork.CurrentRoom.GetPlayer(i + 2).NickName : "";
+                playersName.gameObject.transform.GetChild(i).GetChild(0).GetComponent<TextMeshProUGUI>().text = PhotonNetwork.CurrentRoom.GetPlayer(i + 2) != null ? PhotonNetwork.CurrentRoom.GetPlayer(i + 2).NickName : "";    
             }
-
+           
 
 
             //client view set alpha
@@ -138,14 +119,7 @@ public class GameSetup : MonoBehaviour
             //set button active
             swapButton.gameObject.SetActive(true);
         }
-        else
-        {
-           /* sheet.transform.SetPositionAndRotation(new Vector3(-367, 270, 0), sheet.transform.rotation);
-            sheet.transform.GetComponent<RectTransform>().sizeDelta = new Vector2(750, 750);
-            sheet.transform.GetComponent<GridLayoutGroup>().cellSize = new Vector2(100, 100);*/
-        }
 
-        //Debug.LogWarning("PLayer ID: " +  PhotonNetwork.LocalPlayer.ActorNumber.ToString());
         //set new object active in corelation with max player
         switch (PhotonNetwork.CurrentRoom.MaxPlayers)
         {
@@ -153,7 +127,7 @@ public class GameSetup : MonoBehaviour
                 //update list of draging objects
                 for (int i = 0; i < 4; i++)
                 {
-                    //ListOfDragingObjects[i + 16].gameObject.transform.parent.gameObject.SetActive(true);
+                    ListOfDragingObjects[i + 16].gameObject.transform.parent.gameObject.SetActive(true);
                     //sheet objects
                     sheet.transform.GetChild(i + 16).gameObject.SetActive(true);
                 }
@@ -166,7 +140,7 @@ public class GameSetup : MonoBehaviour
                 //update list of draging objects
                 for (int i = 0; i < 8; i++)
                 {
-                    //ListOfDragingObjects[i + 16].gameObject.transform.parent.gameObject.SetActive(true);
+                    ListOfDragingObjects[i + 16].gameObject.transform.parent.gameObject.SetActive(true);
                     //sheet objects
                     sheet.transform.GetChild(i + 16).gameObject.SetActive(true);
                 }
@@ -179,7 +153,7 @@ public class GameSetup : MonoBehaviour
                 //update list of draging objects
                 for (int i = 0; i < 12; i++)
                 {
-                    //ListOfDragingObjects[i + 16].gameObject.transform.parent.gameObject.SetActive(true);
+                    ListOfDragingObjects[i + 16].gameObject.transform.parent.gameObject.SetActive(true);
                     //sheet objects
                     sheet.transform.GetChild(i + 16).gameObject.SetActive(true);
                 }
@@ -247,33 +221,11 @@ public class GameSetup : MonoBehaviour
     {
         switch (team)
         {
-            case 0:
-                Debug.Log("MASTER");
-                break;
             //Player one objects
             case 1:
                 for (int i = 0; i < 4; i++)
                 {
-                    // playerNumbers.gameObject.SetActive(false);
-                    playerNumbers.GetComponent<CanvasGroup>().alpha = 0;
-                    playerOneNumbers.GetComponent<CanvasGroup>().alpha = 1;
-                    playerOneNumbers.GetComponent<CanvasGroup>().interactable = true;
-                    playerOneNumbers.GetComponent<CanvasGroup>().blocksRaycasts = true;
-                    Vector3 newVector = ListOfDragingObjects[numbers[i]].gameObject.transform.GetComponent<RectTransform>().localPosition;
-
-                    //new
-                    //ListOfDragingObjects[allNumbers[i]].transform.parent.gameObject.SetActive(true);
-
-
-                    GameObject ga = ListOfDragingObjects[numbers[i]].gameObject;
-                    ga.transform.GetComponent<DragAndDropItem>().dragDisabled = false;
-                    ga.transform.SetParent(playerOneNumbers.gameObject.transform.GetChild(i));
-                    ga.transform.GetComponent<RectTransform>().localPosition = newVector;
-                    ga.transform.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 0);
-
-
                     //Debug.LogWarning(ListOfDragingObjects[i].ViewID);
-                    ListOfDragingObjects[numbers[i]].transform.parent.gameObject.SetActive(true);
                     ListOfDragingObjects[numbers[i]].transform.GetChild(0).gameObject.SetActive(true);
                     ListOfDragingObjects[numbers[i]].transform.GetChild(0).GetComponent<Image>().raycastTarget = true;
                     ListOfDragingObjects[numbers[i]].GetComponent<Image>().enabled = true;
@@ -284,28 +236,7 @@ public class GameSetup : MonoBehaviour
             case 2:
                 for (int i = 0; i < 4; i++)
                 {
-                    //playerNumbers.gameObject.SetActive(false);
-                    playerNumbers.GetComponent<CanvasGroup>().alpha = 0;
-
-                    playerTwoNumbers.GetComponent<CanvasGroup>().alpha = 1;
-                    playerTwoNumbers.GetComponent<CanvasGroup>().interactable = true; 
-                    playerTwoNumbers.GetComponent<CanvasGroup>().blocksRaycasts = true;
-
-                    Vector3 newVector = ListOfDragingObjects[numbers[i+4]].gameObject.transform.GetComponent<RectTransform>().localPosition;
-
-                    //new
-                    //ListOfDragingObjects[allNumbers[i]].transform.parent.gameObject.SetActive(true);
-
-
-                    GameObject ga = ListOfDragingObjects[numbers[i+4]].gameObject;
-                    ga.transform.GetComponent<DragAndDropItem>().dragDisabled = false;
-                    ga.transform.SetParent(playerTwoNumbers.gameObject.transform.GetChild(i));
-                    ga.transform.GetComponent<RectTransform>().localPosition = newVector;
-                    ga.transform.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 0);
-
-
                     //Debug.LogWarning(ListOfDragingObjects[i].ViewID);
-                    //ListOfDragingObjects[numbers[i + 4]].transform.parent.gameObject.SetActive(true);
                     ListOfDragingObjects[numbers[i + 4]].transform.GetChild(0).gameObject.SetActive(true);
                     ListOfDragingObjects[numbers[i + 4]].transform.GetChild(0).GetComponent<Image>().raycastTarget = true;
                     ListOfDragingObjects[numbers[i + 4]].GetComponent<Image>().enabled = true;
@@ -316,7 +247,6 @@ public class GameSetup : MonoBehaviour
                 for (int i = 0; i < 4; i++)
                 {
                     //Debug.LogWarning(ListOfDragingObjects[i].ViewID);
-                    ListOfDragingObjects[numbers[i + 8]].transform.parent.gameObject.SetActive(true);
                     ListOfDragingObjects[numbers[i + 8]].GetComponent<Image>().enabled = true;
                     ListOfDragingObjects[numbers[i + 8]].transform.GetChild(0).gameObject.SetActive(true);
                     ListOfDragingObjects[numbers[i + 8]].transform.GetChild(0).GetComponent<Image>().raycastTarget = true;
@@ -327,8 +257,6 @@ public class GameSetup : MonoBehaviour
                 for (int i = 0; i < 4; i++)
                 {
                     //Debug.LogWarning(ListOfDragingObjects[i].ViewID);
-                    ListOfDragingObjects[numbers[i + 12]].transform.parent.gameObject.SetActive(true);
-
                     ListOfDragingObjects[numbers[i + 12]].GetComponent<Image>().enabled = true;
                     ListOfDragingObjects[numbers[i + 12]].transform.GetChild(0).gameObject.SetActive(true);
                     ListOfDragingObjects[numbers[i + 12]].transform.GetChild(0).GetComponent<Image>().raycastTarget = true;
@@ -339,7 +267,6 @@ public class GameSetup : MonoBehaviour
                 for (int i = 0; i < 4; i++)
                 {
                     //Debug.LogWarning(ListOfDragingObjects[i].ViewID);
-                    ListOfDragingObjects[numbers[i + 16]].transform.parent.gameObject.SetActive(true);
                     ListOfDragingObjects[numbers[i + 16]].GetComponent<Image>().enabled = true;
                     ListOfDragingObjects[numbers[i + 16]].transform.GetChild(0).gameObject.SetActive(true);
                     ListOfDragingObjects[numbers[i + 16]].transform.GetChild(0).GetComponent<Image>().raycastTarget = true;
@@ -350,7 +277,6 @@ public class GameSetup : MonoBehaviour
                 for (int i = 0; i < 4; i++)
                 {
                     //Debug.LogWarning(ListOfDragingObjects[i].ViewID);
-                    ListOfDragingObjects[numbers[i + 20]].transform.parent.gameObject.SetActive(true);
                     ListOfDragingObjects[numbers[i + 20]].GetComponent<Image>().enabled = true;
                     ListOfDragingObjects[numbers[i + 20]].transform.GetChild(0).gameObject.SetActive(true);
                     ListOfDragingObjects[numbers[i + 20]].transform.GetChild(0).GetComponent<Image>().raycastTarget = true;
@@ -361,7 +287,6 @@ public class GameSetup : MonoBehaviour
                 for (int i = 0; i < 4; i++)
                 {
                     //Debug.LogWarning(ListOfDragingObjects[i].ViewID);
-                    ListOfDragingObjects[numbers[i + 24]].transform.parent.gameObject.SetActive(true);
                     ListOfDragingObjects[numbers[i + 24]].GetComponent<Image>().enabled = true;
                     ListOfDragingObjects[numbers[i + 24]].transform.GetChild(0).gameObject.SetActive(true);
                     ListOfDragingObjects[numbers[i + 24]].transform.GetChild(0).GetComponent<Image>().raycastTarget = true;
@@ -385,11 +310,7 @@ public class GameSetup : MonoBehaviour
             //object is not dragged 
             //position of dragging object is on playerList
             Vector3 newVector = ListOfDragingObjects[allNumbers[i]].gameObject.transform.GetComponent<RectTransform>().localPosition;
-           
-            //new
-            ListOfDragingObjects[allNumbers[i]].transform.parent.gameObject.SetActive(true);
-            
-            
+
             GameObject ga = ListOfDragingObjects[allNumbers[i]].gameObject;
             ga.transform.GetComponent<DragAndDropItem>().dragDisabled = true;
             ga.transform.SetParent(playerOneNumbers.gameObject.transform.GetChild(i));
@@ -404,9 +325,6 @@ public class GameSetup : MonoBehaviour
             //position of dragging object is on playerList
             Vector3 newVector = ListOfDragingObjects[allNumbers[i + 4]].gameObject.transform.GetComponent<RectTransform>().localPosition;
 
-            ListOfDragingObjects[allNumbers[i+4]].transform.parent.gameObject.SetActive(true);
-
-
             GameObject ga = ListOfDragingObjects[allNumbers[i + 4]].gameObject;
             ga.transform.GetComponent<DragAndDropItem>().dragDisabled = true;
             ga.transform.SetParent(playerTwoNumbers.gameObject.transform.GetChild(i));
@@ -420,9 +338,6 @@ public class GameSetup : MonoBehaviour
             //object is not dragged 
             //position of dragging object is on playerList
             Vector3 newVector = ListOfDragingObjects[allNumbers[i + 8]].gameObject.transform.GetComponent<RectTransform>().localPosition;
-           
-            ListOfDragingObjects[allNumbers[i + 8]].transform.parent.gameObject.SetActive(true);
-
 
             GameObject ga = ListOfDragingObjects[allNumbers[i + 8]].gameObject;
             ga.transform.GetComponent<DragAndDropItem>().dragDisabled = true;
@@ -437,9 +352,6 @@ public class GameSetup : MonoBehaviour
             //object is not dragged 
             //position of dragging object is on playerList
             Vector3 newVector = ListOfDragingObjects[allNumbers[i + 12]].gameObject.transform.GetComponent<RectTransform>().localPosition;
-
-            ListOfDragingObjects[allNumbers[i + 12]].transform.parent.gameObject.SetActive(true);
-
 
             GameObject ga = ListOfDragingObjects[allNumbers[i + 12]].gameObject;
             ga.transform.GetComponent<DragAndDropItem>().dragDisabled = true;
@@ -558,8 +470,6 @@ public class GameSetup : MonoBehaviour
         //Debug.LogWarning("RPC CALLED");
         foreach (PhotonView GO in ListOfDragingObjects)
         {
-            playerNumbers.GetComponent<CanvasGroup>().alpha = 1;
-            //GO.transform.parent.gameObject.SetActive(true);
             GO.gameObject.transform.GetChild(0).gameObject.SetActive(true);
         }
     }
