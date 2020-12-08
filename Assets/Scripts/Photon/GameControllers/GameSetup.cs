@@ -28,12 +28,6 @@ public class GameSetup : MonoBehaviour
     public GameObject playerFiveNumbers;
     public GameObject playerSixNumbers;
     public GameObject playerSevenNumbers;
-    public GameObject playerEightNumbers;
-    public GameObject playerNineNumbers;
-    public GameObject playerTenNumbers;
-
-
-
 
     //player names
     public GameObject playersName;
@@ -65,8 +59,16 @@ public class GameSetup : MonoBehaviour
         if (PhotonNetwork.IsMasterClient)
         {
             //set Sheet view position
-            setGraphic();
-            
+            sheet.transform.SetPositionAndRotation(new Vector3(-367, 270, 0), sheet.transform.rotation);
+            sheet.transform.GetComponent<RectTransform>().sizeDelta = new Vector2(750, 750);
+            sheet.transform.GetComponent<GridLayoutGroup>().cellSize = new Vector2(100, 100);
+            playerOneNumbers.transform.SetPositionAndRotation(new Vector3(-760, 312, 0), playerOneNumbers.transform.rotation);
+            playerTwoNumbers.transform.SetPositionAndRotation(new Vector3(-360, 312, 0), playerTwoNumbers.transform.rotation);
+            playerThreeNumbers.transform.SetPositionAndRotation(new Vector3(40, 312, 0), playerThreeNumbers.transform.rotation);
+            playerFourNumbers.transform.SetPositionAndRotation(new Vector3(440, 312, 0), playerFourNumbers.transform.rotation);
+            playerFiveNumbers.transform.SetPositionAndRotation(new Vector3(-760, -350, 0), playerFiveNumbers.transform.rotation);
+            playerSixNumbers.transform.SetPositionAndRotation(new Vector3(-360, -350, 0), playerSixNumbers.transform.rotation);
+            playerSevenNumbers.transform.SetPositionAndRotation(new Vector3(40, -350, 0), playerSevenNumbers.transform.rotation);
 
 
             //set objects active
@@ -201,21 +203,6 @@ public class GameSetup : MonoBehaviour
         }
     }
 
-    private void setGraphic()
-    {
-        sheet.transform.SetPositionAndRotation(new Vector3(-367, 270, 0), sheet.transform.rotation);
-        sheet.transform.GetComponent<RectTransform>().sizeDelta = new Vector2(750, 750);
-        sheet.transform.GetComponent<GridLayoutGroup>().cellSize = new Vector2(100, 100);
-        playerOneNumbers.transform.SetPositionAndRotation(new Vector3(-760, 312, 0), playerOneNumbers.transform.rotation);
-        playerTwoNumbers.transform.SetPositionAndRotation(new Vector3(-360, 312, 0), playerTwoNumbers.transform.rotation);
-        playerThreeNumbers.transform.SetPositionAndRotation(new Vector3(40, 312, 0), playerThreeNumbers.transform.rotation);
-        playerFourNumbers.transform.SetPositionAndRotation(new Vector3(440, 312, 0), playerFourNumbers.transform.rotation);
-        playerFiveNumbers.transform.SetPositionAndRotation(new Vector3(-760, -350, 0), playerFiveNumbers.transform.rotation);
-        playerSixNumbers.transform.SetPositionAndRotation(new Vector3(-360, -350, 0), playerSixNumbers.transform.rotation);
-        playerSevenNumbers.transform.SetPositionAndRotation(new Vector3(40, -350, 0), playerSevenNumbers.transform.rotation);
-        
-
-    }
     public void DisconnectPlayer()
     {
         if (PhotonPlayer.player != null)
@@ -571,7 +558,7 @@ public class GameSetup : MonoBehaviour
         //Debug.LogWarning("RPC CALLED");
         foreach (PhotonView GO in ListOfDragingObjects)
         {
-            //playerNumbers.GetComponent<CanvasGroup>().alpha = 1;
+            playerNumbers.GetComponent<CanvasGroup>().alpha = 1;
             //GO.transform.parent.gameObject.SetActive(true);
             GO.gameObject.transform.GetChild(0).gameObject.SetActive(true);
         }
