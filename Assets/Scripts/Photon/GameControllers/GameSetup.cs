@@ -8,6 +8,8 @@ using UnityEngine.UI;
 
 public class GameSetup : MonoBehaviour
 {
+    private static int playerViewsCounter = 2;
+
     public static GameSetup GS;
     public Text healthDisplay;
 
@@ -81,7 +83,11 @@ public class GameSetup : MonoBehaviour
             //set button active
             swapButton.gameObject.SetActive(true);
         }
-        scaleImages();
+        else
+        {
+            sheet.transform.GetComponent<RectTransform>().localPosition = new Vector3(247, 0, 0);
+        }
+        //scaleImages();
         activateCellsOnSheet();
 
     }
@@ -197,7 +203,7 @@ public class GameSetup : MonoBehaviour
 
     private void activateCellsOnSheet()
     {
-        int maxCells = (PhotonNetwork.CurrentRoom.MaxPlayers - 1) * 4;
+        int maxCells = (PhotonNetwork.CurrentRoom.MaxPlayers - 1) * playerViewsCounter;
         for (int i = 0; i < maxCells; i++)
         {
             sheet.transform.GetChild(i).gameObject.SetActive(true);
@@ -207,33 +213,33 @@ public class GameSetup : MonoBehaviour
         {
             case 5:
                 //change size of fields
-                sheet.transform.GetComponent<GridLayoutGroup>().constraintCount = 4;
+                sheet.transform.GetComponent<GridLayoutGroup>().constraintCount = 5;
                 sheet.transform.GetComponent<GridLayoutGroup>().cellSize = new Vector2(140, 140);
                 break;
             case 6:
                 //change size of fields
                 sheet.transform.GetComponent<GridLayoutGroup>().constraintCount = 4;
-                sheet.transform.GetComponent<GridLayoutGroup>().cellSize = new Vector2(120, 120);
+                sheet.transform.GetComponent<GridLayoutGroup>().cellSize = new Vector2(150, 150);
                 break;
             case 7:
                 //change size of fields
                 sheet.transform.GetComponent<GridLayoutGroup>().constraintCount = 4;
-                sheet.transform.GetComponent<GridLayoutGroup>().cellSize = new Vector2(110, 110);
+                sheet.transform.GetComponent<GridLayoutGroup>().cellSize = new Vector2(150, 150);
                 break;
             case 8:
                 //change size of fields
                 sheet.transform.GetComponent<GridLayoutGroup>().constraintCount = 4;
-                sheet.transform.GetComponent<GridLayoutGroup>().cellSize = new Vector2(90, 90);
+                sheet.transform.GetComponent<GridLayoutGroup>().cellSize = new Vector2(150, 150);
                 break;
             case 9:
                 //change size of fields
                 sheet.transform.GetComponent<GridLayoutGroup>().constraintCount = 5;
-                sheet.transform.GetComponent<GridLayoutGroup>().cellSize = new Vector2(90, 90);
+                sheet.transform.GetComponent<GridLayoutGroup>().cellSize = new Vector2(140, 140);
                 break;
             case 10:
                 //change size of fields
                 sheet.transform.GetComponent<GridLayoutGroup>().constraintCount = 5;
-                sheet.transform.GetComponent<GridLayoutGroup>().cellSize = new Vector2(90, 90);
+                sheet.transform.GetComponent<GridLayoutGroup>().cellSize = new Vector2(140, 140);
                 break;
         }
     }
@@ -283,7 +289,7 @@ public class GameSetup : MonoBehaviour
 
         if (team > 0 && team < PhotonNetwork.CurrentRoom.MaxPlayers)
         {
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < playerViewsCounter; i++)
             {
                 //enable component for this player
                 playerNumbers.GetComponent<CanvasGroup>().alpha = 0;
@@ -291,7 +297,7 @@ public class GameSetup : MonoBehaviour
                 allPlayersView[team - 1].GetComponent<CanvasGroup>().interactable = true;
                 allPlayersView[team - 1].GetComponent<CanvasGroup>().blocksRaycasts = true;
 
-                int index = i + ((team - 1) * 4);
+                int index = i + ((team - 1) * playerViewsCounter);
                 Vector3 newVector = ListOfDragingObjects[numbers[index]].gameObject.transform.GetComponent<RectTransform>().localPosition;
 
                 GameObject ga = ListOfDragingObjects[numbers[index]].gameObject;
@@ -333,9 +339,9 @@ public class GameSetup : MonoBehaviour
         //for all players
         for (int teamID = 1; teamID < PhotonNetwork.CurrentRoom.MaxPlayers; teamID++)
         {
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < playerViewsCounter; i++)
             {
-                int index = i + (teamID - 1) * 4;
+                int index = i + (teamID - 1) * playerViewsCounter;
                 Vector3 newVector = ListOfDragingObjects[allNumbers[index]].gameObject.transform.GetComponent<RectTransform>().localPosition;
 
                 //new

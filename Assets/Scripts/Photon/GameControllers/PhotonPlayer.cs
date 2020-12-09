@@ -26,16 +26,19 @@ public class PhotonPlayer : MonoBehaviour
     public bool getTeam = false;
     public bool founded = false;
 
+    private static int playerViewsCounter = 2;
+
     void Awake()
     {
         PhotonPlayer.player = this;
+       
     }
 
     // Start is called before the first frame update
     void Start()
     {
         PV = GetComponent<PhotonView>();
-
+        //Debug.LogWarning("counter " + playerViewsCounter);
         if (PhotonNetwork.IsMasterClient)
         {
             if (PV.IsMine)
@@ -44,12 +47,12 @@ public class PhotonPlayer : MonoBehaviour
                 //Debug.Log("max player in room" + PhotonNetwork.CurrentRoom.MaxPlayers);
                 while (true)
                 {
-                    int num = rng.Next(0, (PhotonNetwork.CurrentRoom.MaxPlayers - 1) * 4);
+                    int num = rng.Next(0, (PhotonNetwork.CurrentRoom.MaxPlayers - 1) * playerViewsCounter);
                     if (!AllRandomNumbers.Contains(num))
                     {
                         AllRandomNumbers.Add(num);
                     }
-                    if (AllRandomNumbers.Count == ((PhotonNetwork.CurrentRoom.MaxPlayers - 1) * 4))
+                    if (AllRandomNumbers.Count == ((PhotonNetwork.CurrentRoom.MaxPlayers - 1) * playerViewsCounter))
                     {
                         break;
                     }
