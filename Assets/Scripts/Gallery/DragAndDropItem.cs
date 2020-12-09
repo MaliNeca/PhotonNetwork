@@ -43,7 +43,7 @@ public class DragAndDropItem : MonoBehaviour, IBeginDragHandler, IDragHandler, I
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
             canvas.sortingOrder = canvasSortOrder;
         }
-      
+
     }
 
     /// <summary>
@@ -75,8 +75,6 @@ public class DragAndDropItem : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
             if (OnItemDragStartEvent != null)
             {
-                //sourceCell.cellType = DragAndDropCell.CellType.DropOnly;
-
                 OnItemDragStartEvent(this);                                         // Notify all items about drag start for raycast disabling
             }
         }
@@ -101,7 +99,6 @@ public class DragAndDropItem : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     public void OnEndDrag(PointerEventData eventData)
     {
         setPlayerName(PhotonNetwork.LocalPlayer.NickName);
-
         ResetConditions();
     }
 
@@ -111,18 +108,17 @@ public class DragAndDropItem : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         {
             int itemToSend = draggedItem.GetComponent<PhotonView>().ViewID;
             GetComponent<PhotonView>().RPC("PlaceNameSync", RpcTarget.AllBuffered, itemToSend, PhotonNetwork.LocalPlayer.NickName);
-
         }
     }
 
-   
+
 
     [PunRPC]
     void PlaceNameSync(int _item, string name)
     {
-       
+
         DragAndDropItem item = null;
-   
+
         foreach (PhotonView dg in FindObjectsOfType<PhotonView>())
         {
             if (dg.ViewID == _item)
@@ -130,16 +126,14 @@ public class DragAndDropItem : MonoBehaviour, IBeginDragHandler, IDragHandler, I
                 item = dg.GetComponent<DragAndDropItem>();
             }
         }
-      
+
         if (item != null)
         {
             if (item.transform.parent.parent.CompareTag("Sheet"))
             {
                 item.transform.GetComponentInChildren<TextMeshProUGUI>().text = name;
-
             }
         }
-       
     }
 
     /// <summary>

@@ -219,6 +219,7 @@ public class PhotonRoomCustomMatch : MonoBehaviourPunCallbacks, IInRoomCallbacks
             Debug.LogWarning("Not enough players, room size is: " + PhotonNetwork.CurrentRoom.MaxPlayers);
             return;
         }*/
+
         isGameLoaded = true;
         if (!PhotonNetwork.IsMasterClient) return;
         if (MultiplayerSettings.multiplayerSettings.delayStart)
@@ -296,7 +297,7 @@ public class PhotonRoomCustomMatch : MonoBehaviourPunCallbacks, IInRoomCallbacks
        
         WebGLCopyAndPaste webGLCopy = new WebGLCopyAndPaste();
         webGLCopy.ReceivePaste(PhotonNetwork.CurrentRoom.Name);
-        webGLCopy.GetClipboard("C");
+        //webGLCopy.GetClipboard("C");
         //webGLCopy.ReceivePaste(PhotonNetwork.CurrentRoom.Name);
         
         Debug.Log(PhotonNetwork.CurrentRoom.Name);

@@ -159,8 +159,9 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
 
     //when user click join lobby, disabled for now
     public void JoinLobbyOnClick()
-    {
-        if (!PhotonNetwork.InLobby)
+    {   
+
+        if (!PhotonNetwork.InLobby && PhotonNetwork.IsConnectedAndReady)
         {
             PhotonNetwork.JoinLobby();
         }

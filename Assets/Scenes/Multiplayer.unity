@@ -463,8 +463,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cellType: 2
-  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 0}
-  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0}
+  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 1}
+  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0.5176471}
   unlimitedSource: 0
   playerName: {fileID: 0}
 --- !u!114 &25733063
@@ -985,8 +985,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cellType: 2
-  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 0}
-  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0}
+  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 1}
+  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0.5176471}
   unlimitedSource: 0
   playerName: {fileID: 0}
 --- !u!114 &90909984
@@ -1106,8 +1106,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cellType: 2
-  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 0}
-  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0}
+  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 1}
+  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0.5176471}
   unlimitedSource: 0
   playerName: {fileID: 0}
 --- !u!114 &114761836
@@ -4303,8 +4303,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cellType: 2
-  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 0}
-  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0}
+  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 1}
+  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0.5176471}
   unlimitedSource: 0
   playerName: {fileID: 0}
 --- !u!114 &238365318
@@ -4563,8 +4563,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cellType: 2
-  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 0}
-  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0}
+  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 1}
+  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0.5176471}
   unlimitedSource: 0
   playerName: {fileID: 0}
 --- !u!114 &258386677
@@ -5091,8 +5091,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cellType: 2
-  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 0}
-  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0}
+  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 1}
+  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0.5176471}
   unlimitedSource: 0
   playerName: {fileID: 0}
 --- !u!114 &281921162
@@ -5325,8 +5325,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cellType: 2
-  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 0}
-  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0}
+  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 1}
+  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0.5176471}
   unlimitedSource: 0
   playerName: {fileID: 0}
 --- !u!114 &352209418
@@ -5812,8 +5812,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cellType: 2
-  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 0}
-  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0}
+  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 1}
+  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0.5176471}
   unlimitedSource: 0
   playerName: {fileID: 0}
 --- !u!114 &392070783
@@ -5933,8 +5933,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cellType: 2
-  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 0}
-  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0}
+  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 1}
+  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0.5176471}
   unlimitedSource: 0
   playerName: {fileID: 0}
 --- !u!114 &440384497
@@ -6048,8 +6048,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cellType: 2
-  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 0}
-  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0}
+  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 1}
+  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0.5176471}
   unlimitedSource: 0
   playerName: {fileID: 0}
 --- !u!114 &450337122
@@ -6819,8 +6819,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cellType: 2
-  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 0}
-  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0}
+  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 1}
+  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0.5176471}
   unlimitedSource: 0
   playerName: {fileID: 0}
 --- !u!114 &509425068
@@ -8601,8 +8601,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cellType: 2
-  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 0}
-  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0}
+  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 1}
+  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0.5176471}
   unlimitedSource: 0
   playerName: {fileID: 0}
 --- !u!114 &656087491
@@ -10326,8 +10326,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cellType: 2
-  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 0}
-  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0}
+  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 1}
+  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0.5176471}
   unlimitedSource: 0
   playerName: {fileID: 0}
 --- !u!114 &771771566
@@ -10441,8 +10441,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cellType: 2
-  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 0}
-  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0}
+  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 1}
+  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0.5176471}
   unlimitedSource: 0
   playerName: {fileID: 0}
 --- !u!114 &782073020
@@ -10834,8 +10834,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cellType: 2
-  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 0}
-  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0}
+  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 1}
+  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0.5176471}
   unlimitedSource: 0
   playerName: {fileID: 0}
 --- !u!114 &814650477
@@ -11926,8 +11926,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cellType: 2
-  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 0}
-  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0}
+  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 1}
+  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0.5176471}
   unlimitedSource: 0
   playerName: {fileID: 0}
 --- !u!114 &860041538
@@ -14150,8 +14150,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cellType: 2
-  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 0}
-  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0}
+  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 1}
+  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0.5176471}
   unlimitedSource: 0
   playerName: {fileID: 0}
 --- !u!114 &1052615634
@@ -14590,8 +14590,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cellType: 2
-  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 0}
-  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0}
+  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 1}
+  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0.5176471}
   unlimitedSource: 0
   playerName: {fileID: 0}
 --- !u!114 &1095075339
@@ -16782,8 +16782,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cellType: 2
-  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 0}
-  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0}
+  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 1}
+  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0.5176471}
   unlimitedSource: 0
   playerName: {fileID: 0}
 --- !u!114 &1200964521
@@ -17035,8 +17035,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cellType: 2
-  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 0}
-  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0}
+  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 1}
+  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0.5176471}
   unlimitedSource: 0
   playerName: {fileID: 0}
 --- !u!114 &1239985142
@@ -17290,8 +17290,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cellType: 2
-  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 0}
-  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0}
+  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 1}
+  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0.5176471}
   unlimitedSource: 0
   playerName: {fileID: 0}
 --- !u!114 &1273905851
@@ -17405,8 +17405,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cellType: 2
-  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 0}
-  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0}
+  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 1}
+  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0.5176471}
   unlimitedSource: 0
   playerName: {fileID: 0}
 --- !u!114 &1292912171
@@ -17665,8 +17665,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cellType: 2
-  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 0}
-  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0}
+  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 1}
+  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0.5176471}
   unlimitedSource: 0
   playerName: {fileID: 0}
 --- !u!114 &1305349382
@@ -18603,8 +18603,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cellType: 2
-  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 0}
-  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0}
+  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 1}
+  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0.5176471}
   unlimitedSource: 0
   playerName: {fileID: 0}
 --- !u!114 &1330361925
@@ -19008,8 +19008,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cellType: 2
-  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 0}
-  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0}
+  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 1}
+  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0.5176471}
   unlimitedSource: 0
   playerName: {fileID: 0}
 --- !u!114 &1362352538
@@ -19123,8 +19123,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cellType: 2
-  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 0}
-  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0}
+  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 1}
+  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0.5176471}
   unlimitedSource: 0
   playerName: {fileID: 0}
 --- !u!114 &1364312802
@@ -19965,8 +19965,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cellType: 2
-  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 0}
-  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0}
+  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 1}
+  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0.5176471}
   unlimitedSource: 0
   playerName: {fileID: 0}
 --- !u!114 &1452764357
@@ -20080,8 +20080,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cellType: 2
-  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 0}
-  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0}
+  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 1}
+  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0.5176471}
   unlimitedSource: 0
   playerName: {fileID: 0}
 --- !u!114 &1455677244
@@ -20527,8 +20527,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cellType: 2
-  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 0}
-  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0}
+  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 1}
+  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0.5176471}
   unlimitedSource: 0
   playerName: {fileID: 0}
 --- !u!114 &1584374483
@@ -20642,8 +20642,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cellType: 2
-  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 0}
-  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0}
+  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 1}
+  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0.5176471}
   unlimitedSource: 0
   playerName: {fileID: 0}
 --- !u!114 &1589221302
@@ -21722,8 +21722,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cellType: 2
-  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 0}
-  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0}
+  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 1}
+  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0.5176471}
   unlimitedSource: 0
   playerName: {fileID: 0}
 --- !u!114 &1667285614
@@ -21988,8 +21988,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cellType: 2
-  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 0}
-  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0}
+  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 1}
+  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0.5176471}
   unlimitedSource: 0
   playerName: {fileID: 0}
 --- !u!114 &1678512742
@@ -22759,8 +22759,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cellType: 2
-  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 0}
-  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0}
+  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 1}
+  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0.5176471}
   unlimitedSource: 0
   playerName: {fileID: 0}
 --- !u!114 &1741249122
@@ -24604,8 +24604,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cellType: 2
-  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 0}
-  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0}
+  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 1}
+  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0.5176471}
   unlimitedSource: 0
   playerName: {fileID: 0}
 --- !u!114 &1877078379
@@ -25009,8 +25009,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cellType: 2
-  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 0}
-  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0}
+  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 1}
+  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0.5176471}
   unlimitedSource: 0
   playerName: {fileID: 0}
 --- !u!114 &1901246311
@@ -25855,8 +25855,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cellType: 2
-  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 0}
-  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0}
+  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 1}
+  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0.5176471}
   unlimitedSource: 0
   playerName: {fileID: 0}
 --- !u!114 &1964587168
@@ -26260,8 +26260,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cellType: 2
-  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 0}
-  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0}
+  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 1}
+  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0.5176471}
   unlimitedSource: 0
   playerName: {fileID: 0}
 --- !u!114 &1994745000
@@ -26508,8 +26508,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cellType: 2
-  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 0}
-  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0}
+  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 1}
+  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0.5176471}
   unlimitedSource: 0
   playerName: {fileID: 0}
 --- !u!114 &2001535794
@@ -26844,8 +26844,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cellType: 2
-  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 0}
-  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0}
+  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 1}
+  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0.5176471}
   unlimitedSource: 0
   playerName: {fileID: 0}
 --- !u!114 &2038744270
@@ -28250,8 +28250,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cellType: 2
-  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 0}
-  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0}
+  empty: {r: 0.8862745, g: 1, b: 0.75686276, a: 1}
+  full: {r: 1, g: 0.95686275, b: 0.75686276, a: 0.5176471}
   unlimitedSource: 0
   playerName: {fileID: 0}
 --- !u!114 &4551390458781600559
