@@ -67,13 +67,13 @@ public class GameSetup : MonoBehaviour
         if (PhotonNetwork.IsMasterClient)
         {
             //set Sheet view position
-            setGraphic();
+           // setGraphic();
 
             //enable views for all students
-            setAlphaForStudentsView();
+           // setAlphaForStudentsView();
 
             //players name visible
-            setPlayersName();
+            //setPlayersName();
 
             //client view set alpha
             playerNumbers.transform.GetComponent<CanvasGroup>().alpha = 0;
@@ -102,7 +102,7 @@ public class GameSetup : MonoBehaviour
     private void setGraphic()
     {
         //sheet view 
-        sheet.transform.SetPositionAndRotation(new Vector3(-449, 374, 0), sheet.transform.rotation);
+        //sheet.transform.SetPositionAndRotation(new Vector3(-449, 374, 0), sheet.transform.rotation);
         sheet.transform.GetComponent<RectTransform>().sizeDelta = new Vector2(800, 800);
         sheet.transform.GetComponent<GridLayoutGroup>().cellSize = new Vector2(140, 140);
 

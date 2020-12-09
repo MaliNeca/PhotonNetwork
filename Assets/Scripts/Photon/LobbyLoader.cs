@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-
+using TMPro;
 
 public class LobbyLoader : MonoBehaviour
 {
@@ -9,6 +9,10 @@ public class LobbyLoader : MonoBehaviour
     public GameObject playerType;
     public GameObject teacherLobby;
     public GameObject playerLobby;
+    public TMP_InputField TeacherInputField;
+    public string TeacherInputFieldPassword;
+    public TMP_InputField PlayerInputField;
+    public string PlayerInputFieldPassword;
     //1 - teacher, 2 - player
     public int type = 0;
 
@@ -21,15 +25,21 @@ public class LobbyLoader : MonoBehaviour
     public void TeacherButtonPressed()
     {
         //master client
-        type = 1;
-        setLobbyByClient(type);
+        if (TeacherInputField.text == TeacherInputFieldPassword)
+        {
+            type = 1;
+            setLobbyByClient(type);
+        }
     }
 
     public void PlayerButtonPressed()
     {
         //player client
-        type = 2;
-        setLobbyByClient(type);
+        if (PlayerInputField.text == PlayerInputFieldPassword)
+        {
+            type = 2;
+            setLobbyByClient(type);
+        }
     }
     private void setLobbyByClient(int clientType)
     {

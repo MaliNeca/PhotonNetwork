@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-
+using TMPro;
 public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
 {
     //lobby instance
@@ -21,7 +21,7 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
 
     //roomCode for access
     private static System.Random random = new System.Random();
-    private int roomCodeLength = 10;
+    private int roomCodeLength = 5;
 
     //room settings
     private static int minRoomSize = 5;
@@ -118,6 +118,8 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
         }
     }
 
+    public GameObject RoomCodeText;
+    public GameObject StartGameText;
     //create new Room
     public void CreateRoom()
     {
@@ -132,6 +134,10 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
         /*ExitGames.Client.Photon.Hashtable t = new ExitGames.Client.Photon.Hashtable();
         t.Add("playerName", "NE");
         roomOps.CustomRoomProperties = t;*/
+        RoomText.text = "Send this code to participants. Select then Ctrl-c to copy.";
+        WaitingRoom.SetActive(false);
+        RoomCodeText.SetActive(true);
+        StartGameText.SetActive(true);
         PhotonNetwork.CreateRoom(roomName, roomOps);
     }
 
@@ -166,12 +172,17 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
             PhotonNetwork.JoinLobby();
         }
     }
-
+    public TextMeshProUGUI RoomText;
+    public GameObject WaitingRoom;
     //join room with code
     public void JoinRoomOnClick()
     {
         if (roomCode.Length != 0)
         {
+            RoomText.text = "Please wait organiser to start the game.";
+            WaitingRoom.SetActive(true);
+            RoomCodeText.SetActive(false);
+            StartGameText.SetActive(false);
             PhotonNetwork.JoinRoom(roomCode);
         }
     }
