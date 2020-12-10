@@ -311,7 +311,8 @@ public class GameSetup : MonoBehaviour
                 ListOfDragingObjects[numbers[index]].transform.parent.gameObject.SetActive(true);
                 ListOfDragingObjects[numbers[index]].transform.GetChild(0).gameObject.SetActive(true);
                 ListOfDragingObjects[numbers[index]].transform.GetChild(0).GetComponent<Image>().raycastTarget = true;
-                ListOfDragingObjects[numbers[index]].GetComponent<Image>().enabled = true;
+
+                ListOfDragingObjects[numbers[index]].GetComponent<Image>().enabled = false;
                 ListOfDragingObjects[numbers[index]].transform.GetComponentInParent<Transform>().SetAsFirstSibling();
             }
 
