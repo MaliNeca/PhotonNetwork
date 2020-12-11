@@ -27,7 +27,7 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
     private int roomCodeLength = 5;
 
     //room settings
-    private static int minRoomSize = 5;
+    private static int minRoomSize = 7;
     private static int maxRoomSize = 11;
 
     public GameObject RoomCodeText;
@@ -151,7 +151,7 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
         else if (roomSize < minRoomSize || roomSize > maxRoomSize)
         {
             //Debug.LogWarning("Room size must be between 4 and 10 players including teacher");
-            errorMessage.text = "Room size must be between 4 and 10 players";
+            errorMessage.text = "Room size must be between 6 and 10 players";
             errorMessage.gameObject.SetActive(true);
             return;
         }

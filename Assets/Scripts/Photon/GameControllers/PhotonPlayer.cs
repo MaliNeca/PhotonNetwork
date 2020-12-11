@@ -108,10 +108,35 @@ public class PhotonPlayer : MonoBehaviour
         }
         else
         {
-            for(int i = 0; i < (PhotonNetwork.CurrentRoom.MaxPlayers - 1) * playerViewsCounter; i++)
+            switch(PhotonNetwork.CurrentRoom.MaxPlayers - 1)
+            {
+                case 4:
+                case 5:
+                case 6:
+                    tempList = new List<int>(12) {1,9,0,5,2,7,4,18,8,6,16,10};
+                    break;
+                case 7:
+                    tempList = new List<int>(14) {1,9,0,19,2,6,4,18,8,17,16,7,5,10};
+                    break;
+                case 8:
+                    tempList = new List<int>(16) {1,9,0,19,2,5,3,6,4,18,8,17,16,7,11,10};
+                    break;
+                case 9:
+                    tempList = new List<int>(18) {1, 9, 0, 19, 2, 12, 3, 6, 4, 18, 8, 19, 16, 13, 11, 7, 5, 10};
+                    break;
+                case 10:
+                    tempList = new List<int>(20) {1, 19, 0, 12, 2, 6,3,18,4,17,8,13,16,7,11,10,5,14,9,15};
+                    break;
+                default:
+                    Debug.LogWarning("Nije podeseno za 4");
+                    break;
+            }
+
+
+            /*for(int i = 0; i < (PhotonNetwork.CurrentRoom.MaxPlayers - 1) * playerViewsCounter; i++)
             {
                 tempList.Add(i);
-            }
+            }*/
            
             return tempList;
         }
