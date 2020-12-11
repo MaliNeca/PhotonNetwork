@@ -1,4 +1,5 @@
 ﻿using Photon.Pun;
+using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
 using System.IO;
 using UnityEngine;
@@ -38,6 +39,9 @@ public class PhotonRoomCustomMatch : MonoBehaviourPunCallbacks, IInRoomCallbacks
     public Text roomCode;
     public InputField roomCodeField;
     public GameObject lobbyController;
+
+    public GameObject roomCodeText;
+    public GameObject startGameText;
 
 
     private void Awake()
@@ -117,43 +121,61 @@ public class PhotonRoomCustomMatch : MonoBehaviourPunCallbacks, IInRoomCallbacks
     //player join room
     public override void OnJoinedRoom()
     {
-        //sets player data when we join the room
-        base.OnJoinedRoom();
-        Debug.Log("We are in room now");
-        lobbyGameObject.SetActive(false);
-        roomGO.SetActive(true);
-        if (PhotonNetwork.IsMasterClient)
+
+            
+        
+       // DisconnectsRecovery.recovery.inRoom = true;
+        if (DisconnectsRecovery.recovery.rejoinCalled)
         {
-            startButton.SetActive(true);
-            //copyButton.SetActive(true);
-            //roomCode.gameObject.SetActive(true);
-            roomCode.text = PhotonNetwork.CurrentRoom.Name;
-            roomCodeField.gameObject.SetActive(true);
-            roomCodeField.text = PhotonNetwork.CurrentRoom.Name;
+            Debug.Log("Rejoin successful match");
+           // DisconnectsRecovery.recovery.reconnectCalled = false;
         }
-        //clear current player list
-        ClearPlayerListings();
-        //add all players
-        ListAllPlayers();
-
-        photonPlayers = PhotonNetwork.PlayerList;
-        playersInRoom = photonPlayers.Length;
-        //PlayerID
-        myNumberInRoom = playersInRoom;
-
-        //for delay start only
-        if (MultiplayerSettings.multiplayerSettings.delayStart)
+        else
         {
-            Debug.Log("Displayer players in room out of max players possible (" + playersInRoom + " : " + MultiplayerSettings.multiplayerSettings.maxPlayers + ")");
-            if (playersInRoom > 1)
+            PhotonLobbyCustomMatch.lobby.errorMessage.gameObject.SetActive(false);
+            //sets player data when we join the room
+            base.OnJoinedRoom();
+            Debug.Log("We are in room now");
+            lobbyGameObject.SetActive(false);
+            roomGO.SetActive(true);
+            if (PhotonNetwork.IsMasterClient)
             {
-                readyToCount = true;
+                startButton.SetActive(true);
+                //copyButton.SetActive(true);
+                //roomCode.gameObject.SetActive(true);
+                roomCode.text = PhotonNetwork.CurrentRoom.Name;
+
+                //enable text for master
+                roomCodeText.gameObject.SetActive(true);
+                startGameText.gameObject.SetActive(true);
+
+                roomCodeField.gameObject.SetActive(true);
+                roomCodeField.text = PhotonNetwork.CurrentRoom.Name;
             }
-            if (playersInRoom == MultiplayerSettings.multiplayerSettings.maxPlayers)
+            //clear current player list
+            ClearPlayerListings();
+            //add all players
+            ListAllPlayers();
+
+            photonPlayers = PhotonNetwork.PlayerList;
+            playersInRoom = photonPlayers.Length;
+            //PlayerID
+            myNumberInRoom = playersInRoom;
+
+            //for delay start only
+            if (MultiplayerSettings.multiplayerSettings.delayStart)
             {
-                readyToStart = true;
-                if (!PhotonNetwork.IsMasterClient) return;
-                PhotonNetwork.CurrentRoom.IsOpen = false;
+                Debug.Log("Displayer players in room out of max players possible (" + playersInRoom + " : " + MultiplayerSettings.multiplayerSettings.maxPlayers + ")");
+                if (playersInRoom > 1)
+                {
+                    readyToCount = true;
+                }
+                if (playersInRoom == MultiplayerSettings.multiplayerSettings.maxPlayers)
+                {
+                    readyToStart = true;
+                    if (!PhotonNetwork.IsMasterClient) return;
+                    PhotonNetwork.CurrentRoom.IsOpen = false;
+                }
             }
         }
     }

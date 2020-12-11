@@ -13,6 +13,8 @@ public class LobbyLoader : MonoBehaviour
     public string TeacherInputFieldPassword;
     public TMP_InputField PlayerInputField;
     public string PlayerInputFieldPassword;
+    public TMP_InputField errorMessage;
+
     //1 - teacher, 2 - player
     public int type = 0;
 
@@ -27,8 +29,16 @@ public class LobbyLoader : MonoBehaviour
         //master client
         if (TeacherInputField.text == TeacherInputFieldPassword)
         {
+            errorMessage.gameObject.SetActive(false);
             type = 1;
             setLobbyByClient(type);
+        }
+        else
+        {
+            errorMessage.lineType = TMP_InputField.LineType.MultiLineSubmit;
+            errorMessage.text = "Error singing into the game. \nTeacher password is wrong.";
+            errorMessage.gameObject.SetActive(true);
+
         }
     }
 
@@ -37,8 +47,15 @@ public class LobbyLoader : MonoBehaviour
         //player client
         if (PlayerInputField.text == PlayerInputFieldPassword)
         {
+            errorMessage.gameObject.SetActive(false);
             type = 2;
             setLobbyByClient(type);
+        }
+        else
+        {
+            errorMessage.lineType = TMP_InputField.LineType.MultiLineSubmit;
+            errorMessage.text = "Error singing into the game. \nStudent password is wrong.";
+            errorMessage.gameObject.SetActive(true);
         }
     }
     private void setLobbyByClient(int clientType)

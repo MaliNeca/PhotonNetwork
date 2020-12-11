@@ -25,8 +25,10 @@ public class PhotonPlayer : MonoBehaviour
     public bool getList = false;
     public bool getTeam = false;
     public bool founded = false;
+    public bool randomList;
 
     private static int playerViewsCounter = 2;
+
 
     void Awake()
     {
@@ -45,7 +47,7 @@ public class PhotonPlayer : MonoBehaviour
             {
                 //randomize list
                 //Debug.Log("max player in room" + PhotonNetwork.CurrentRoom.MaxPlayers);
-                while (true)
+              /*  while (true)
                 {
                     int num = rng.Next(0, (PhotonNetwork.CurrentRoom.MaxPlayers - 1) * playerViewsCounter);
                     if (!AllRandomNumbers.Contains(num))
@@ -56,7 +58,9 @@ public class PhotonPlayer : MonoBehaviour
                     {
                         break;
                     }
-                }
+                }*/
+
+                AllRandomNumbers = randomizeList(randomList);
                 //send gameSetup list of numbers
                 GameSetup.GS.SetActiveList(AllRandomNumbers, 0);
                 GameSetup.GS.SetList(AllRandomNumbers);
@@ -82,6 +86,35 @@ public class PhotonPlayer : MonoBehaviour
     void Update()
     {
 
+    }
+
+    private List<int> randomizeList(bool random)
+    {
+        List<int> tempList = new List<int>();
+        if (random)
+        {
+            while (true)
+            {
+                int num = rng.Next(0, (PhotonNetwork.CurrentRoom.MaxPlayers - 1) * playerViewsCounter);
+                if (!tempList.Contains(num))
+                {
+                    tempList.Add(num);
+                }
+                if (tempList.Count == ((PhotonNetwork.CurrentRoom.MaxPlayers - 1) * playerViewsCounter))
+                {
+                    return tempList;
+                }
+            }
+        }
+        else
+        {
+            for(int i = 0; i < (PhotonNetwork.CurrentRoom.MaxPlayers - 1) * playerViewsCounter; i++)
+            {
+                tempList.Add(i);
+            }
+           
+            return tempList;
+        }
     }
 
     //call rpc to update view on all clients

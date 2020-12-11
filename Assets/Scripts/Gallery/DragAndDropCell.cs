@@ -218,7 +218,7 @@ public class DragAndDropCell : MonoBehaviour, IDropHandler
     void PlaceItemSync(int _item)
     {
         DragAndDropItem item = null;
-        Debug.Log("ITEM: " + _item);
+       // Debug.Log("ITEM: " + _item);
         foreach (PhotonView dg in FindObjectsOfType<PhotonView>())
         {
             if (dg.ViewID == _item)
@@ -243,8 +243,8 @@ public class DragAndDropCell : MonoBehaviour, IDropHandler
                     item = Instantiate(item);
                     item.name = itemName;
                 }
-                Debug.LogWarning("parent 2: " + cell.name);
-                Debug.LogWarning("evo ga ovde drag");
+                //Debug.LogWarning("parent 2: " + cell.name);
+               // Debug.LogWarning("evo ga ovde drag");
 
 
                 //set source cell type
@@ -270,6 +270,7 @@ public class DragAndDropCell : MonoBehaviour, IDropHandler
             if (myDadItem.GetComponentInParent<DragAndDropCell>().transform.parent.gameObject.CompareTag("Sheet"))
             {
                 myDadItem.gameObject.transform.GetChild(1).gameObject.SetActive(true);
+                myDadItem.gameObject.transform.GetChild(1).GetComponent<TextMeshProUGUI>().color = Color.black;
             }
             else
             {

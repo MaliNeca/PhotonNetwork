@@ -63,16 +63,14 @@ public class GameSetup : MonoBehaviour
           }*/
 
         //scale numbers items in player view
-
-        
-
         if (PhotonNetwork.IsMasterClient)
         {
             //set Sheet view position
-           // setGraphic();
+            //setGraphic();
+            sheet.transform.SetPositionAndRotation(new Vector3(0, 0, 0), sheet.transform.rotation);
 
             //enable views for all students
-           // setAlphaForStudentsView();
+            // setAlphaForStudentsView();
 
             //players name visible
             //setPlayersName();
@@ -85,10 +83,11 @@ public class GameSetup : MonoBehaviour
         }
         else
         {
-            sheet.transform.GetComponent<RectTransform>().localPosition = new Vector3(247, 0, 0);
+            sheet.transform.GetComponent<RectTransform>().localPosition = new Vector3(210, 0, 0);
         }
         //scaleImages();
-        activateCellsOnSheet();
+        //activateCellsOnSheet();
+        activateCellsOnSheetPredefine(30);
 
     }
 
@@ -201,6 +200,16 @@ public class GameSetup : MonoBehaviour
         }
     }
 
+    private void activateCellsOnSheetPredefine(int max)
+    {
+        int maxCells = max;
+        for (int i = 0; i < maxCells; i++)
+        {
+            sheet.transform.GetChild(i).gameObject.SetActive(true);
+
+        }
+    }
+
     private void activateCellsOnSheet()
     {
         int maxCells = (PhotonNetwork.CurrentRoom.MaxPlayers - 1) * playerViewsCounter;
@@ -243,14 +252,30 @@ public class GameSetup : MonoBehaviour
                 break;
         }
     }
+
+    public bool logoutCalled = false;
+
     public void DisconnectPlayer()
     {
+        this.logoutCalled = true;
         if (PhotonPlayer.player != null)
         {
             Destroy(PhotonPlayer.player.gameObject);
         }
         Destroy(PhotonRoomCustomMatch.room.gameObject);
         StartCoroutine(DisconnectAndLoad());
+    }
+
+    public void DisconnectPlayerTest()
+    {
+        StartCoroutine(DisconnectAndReLoad());
+    }
+
+    IEnumerator DisconnectAndReLoad()
+    {
+        PhotonNetwork.Disconnect();
+        while (PhotonNetwork.IsConnected) yield return null;
+        //SceneManager.LoadScene(MultiplayerSettings.multiplayerSettings.menuScene);
     }
 
     IEnumerator DisconnectAndLoad()
@@ -372,7 +397,13 @@ public class GameSetup : MonoBehaviour
     {
         foreach (PhotonView GO in ListOfDragingObjects)
         {
-            GO.gameObject.transform.GetChild(0).gameObject.SetActive(true);
+            if (GO.gameObject.transform.GetChild(0) != null)
+            {
+              GO.gameObject.transform.GetChild(0).gameObject.SetActive(true);
+            }
         }
     }
+
+
+   
 }

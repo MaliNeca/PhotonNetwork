@@ -5,6 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using TMPro;
+using Photon.Pun.UtilityScripts;
+using UnityEngine.UI;
+
 public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
 {
     //lobby instance
@@ -27,7 +30,13 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
     private static int minRoomSize = 5;
     private static int maxRoomSize = 11;
 
+    public GameObject RoomCodeText;
+    public GameObject StartGameText;
 
+    public TMP_InputField errorMessage;
+
+    public InputField teacherNameIF;
+    public InputField roomNameIF;
 
     private void Awake()
     {
@@ -52,9 +61,12 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
     //Connect to Master server
     public override void OnConnectedToMaster()
     {
+
         Debug.Log("Player has conntected to the Photon master server");
         PhotonNetwork.AutomaticallySyncScene = true;
         PhotonNetwork.NickName = "Player " + Random.Range(0, 1000);
+
+
     }
 
     public override void OnDisconnected(DisconnectCause cause)
@@ -66,7 +78,7 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
         base.OnRoomListUpdate(roomList);
-        RemoveRoomListings(roomList);
+        //RemoveRoomListings(roomList);
     }
 
     static System.Predicate<RoomInfo> ByName(string whichName)
@@ -118,26 +130,40 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
         }
     }
 
-    public GameObject RoomCodeText;
-    public GameObject StartGameText;
+
     //create new Room
     public void CreateRoom()
     {
         Debug.Log("Trying to create a new room");
-        //check default room size
-        if (roomSize < minRoomSize || roomSize > maxRoomSize)
+        //check default room size, player name and room name
+        if (teacherNameIF.text.Length == 0)
         {
-            Debug.LogWarning("Room size must be between 4 and 10 players including teacher");
+            errorMessage.text = "Please insert teacher name.";
+            errorMessage.gameObject.SetActive(true);
             return;
         }
-        RoomOptions roomOps = new RoomOptions() { IsVisible = true, IsOpen = true, MaxPlayers = (byte)roomSize};
-        /*ExitGames.Client.Photon.Hashtable t = new ExitGames.Client.Photon.Hashtable();
-        t.Add("playerName", "NE");
-        roomOps.CustomRoomProperties = t;*/
+        else if (roomNameIF.text.Length == 0)
+        {
+            errorMessage.text = "Please insert room name.";
+            errorMessage.gameObject.SetActive(true);
+            return;
+        }
+        else if (roomSize < minRoomSize || roomSize > maxRoomSize)
+        {
+            //Debug.LogWarning("Room size must be between 4 and 10 players including teacher");
+            errorMessage.text = "Room size must be between 4 and 10 players";
+            errorMessage.gameObject.SetActive(true);
+            return;
+        }
+        errorMessage.gameObject.SetActive(false);
+        RoomOptions roomOps = new RoomOptions() { IsVisible = true, IsOpen = true, MaxPlayers = (byte)roomSize };
+        roomOps.PlayerTtl = 180000; //60sec
+        roomOps.EmptyRoomTtl = 180000; //60sec
+
         RoomText.text = "Send this code to participants. Select then Ctrl-c to copy.";
         WaitingRoom.SetActive(false);
-        RoomCodeText.SetActive(true);
-        StartGameText.SetActive(true);
+        /* RoomCodeText.SetActive(true);
+         StartGameText.SetActive(true);*/
         PhotonNetwork.CreateRoom(roomName, roomOps);
     }
 
@@ -158,6 +184,15 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
     public void OnRoomSizeChanged(string sizeIn)
     {
         //only number of clients add teacher
+        if(sizeIn.Length == 0)
+        {
+            return;
+        }
+        foreach (char c in sizeIn)
+        {
+            if (c < '0' || c > '9')
+                return;
+        }
         int temp = int.Parse(sizeIn);
         temp++;
         roomSize = temp;
@@ -165,7 +200,7 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
 
     //when user click join lobby, disabled for now
     public void JoinLobbyOnClick()
-    {   
+    {
 
         if (!PhotonNetwork.InLobby && PhotonNetwork.IsConnectedAndReady)
         {
@@ -177,15 +212,43 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
     //join room with code
     public void JoinRoomOnClick()
     {
+
         if (roomCode.Length != 0)
         {
+            errorMessage.gameObject.SetActive(false);
             RoomText.text = "Please wait organiser to start the game.";
             WaitingRoom.SetActive(true);
             RoomCodeText.SetActive(false);
             StartGameText.SetActive(false);
             PhotonNetwork.JoinRoom(roomCode);
         }
+        else
+        {
+            errorMessage.text = "Insert room code.";
+            errorMessage.gameObject.SetActive(true);
+        }
     }
+
+    public override void OnJoinRoomFailed(short returnCode, string message)
+    {
+        base.OnJoinRoomFailed(returnCode, message);
+        errorMessage.text = "Wrong room code.";
+        errorMessage.gameObject.SetActive(true);
+    }
+
+    //Rejoin room with code
+    public void ReJoinRoomOnClick()
+    {
+        if (roomCode.Length != 0)
+        {
+            //RoomText.text = "Please wait organiser to start the game.";
+            WaitingRoom.SetActive(true);
+            RoomCodeText.SetActive(false);
+            StartGameText.SetActive(false);
+            PhotonNetwork.RejoinRoom(roomCode);
+        }
+    }
+
 
     //generate room code
     public static string RandomString(int length)
