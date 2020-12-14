@@ -1,4 +1,6 @@
-﻿using Photon.Realtime;
+﻿using ExitGames.Client.Photon;
+using Photon.Realtime;
+using TMPro;
 using UnityEngine;
 
 
@@ -10,15 +12,18 @@ namespace Photon.Pun.UtilityScripts
     public class DisconnectsRecovery : MonoBehaviourPunCallbacks
     {
         public static DisconnectsRecovery recovery;
-
+       
         public bool rejoinCalled;
 
         public bool reconnectCalled;
 
         public bool inRoom;
 
+        public TMP_InputField errorMessage;
+
         private DisconnectCause previousDisconnectCause;
 
+        
 
         private void Awake()
         {
@@ -41,27 +46,35 @@ namespace Photon.Pun.UtilityScripts
 
         public override void OnDisconnected(DisconnectCause cause)
         {
-            
+
             Debug.LogFormat("OnDisconnected(cause={0}) ClientState={1} PeerState={2}",
                             cause,
                             PhotonNetwork.NetworkingClient.State,
                             PhotonNetwork.NetworkingClient.LoadBalancingPeer.PeerState);
             if (this.rejoinCalled)
             {
-                Debug.LogErrorFormat("Rejoin failed, client disconnected, causes; prev.:{0} current:{1}", this.previousDisconnectCause, cause);
+                Debug.LogWarningFormat("Rejoin failed, client disconnected, causes; prev.:{0} current:{1}", this.previousDisconnectCause, cause);
                 this.rejoinCalled = false;
             }
             else if (this.reconnectCalled)
             {
-                Debug.LogErrorFormat("Reconnect failed, client disconnected, causes; prev.:{0} current:{1}", this.previousDisconnectCause, cause);
+                Debug.LogWarningFormat("Reconnect failed, client disconnected, causes; prev.:{0} current:{1}", this.previousDisconnectCause, cause);
                 this.reconnectCalled = false;
             }
-            if (!GameSetup.GS.logoutCalled)
+            if (!GameSetup.GS.logoutCalled && !GameSetup.GS.disconnectCalled)
             {
+                GameSetup.GS.setError(true, "Player disconnected. \nTrying to reconnect...");
+
                 this.HandleDisconnect(cause); // add attempts counter? to avoid infinite retries?
+            }
+            else
+            {
+                GameSetup.GS.setError(true, "Player disconnected. \nClick reconnect button.");
             }
             this.inRoom = false;
             this.previousDisconnectCause = cause;
+           
+
         }
 
         private void HandleDisconnect(DisconnectCause cause)
@@ -75,7 +88,7 @@ namespace Photon.Pun.UtilityScripts
                 case DisconnectCause.DisconnectByServerLogic:
                 case DisconnectCause.AuthenticationTicketExpired:
                 case DisconnectCause.DisconnectByServerReasonUnknown:
-                    /*if (this.inRoom)
+                    if (!this.inRoom)
                     {
                         Debug.Log("calling PhotonNetwork.ReconnectAndRejoin()");
                         this.rejoinCalled = PhotonNetwork.ReconnectAndRejoin();
@@ -92,39 +105,32 @@ namespace Photon.Pun.UtilityScripts
                     }
                     if (!this.rejoinCalled && !this.reconnectCalled)
                     {
-                        Debug.LogError("PhotonNetwork.ReconnectAndRejoin() or PhotonNetwork.Reconnect() returned false, client stays disconnected.");
-                    }*/
-
-
-                    Debug.Log("calling PhotonNetwork.ReconnectAndRejoin()");
-                    this.rejoinCalled = PhotonNetwork.ReconnectAndRejoin();
-                    if (!this.rejoinCalled)
-                    {
-                        Debug.LogWarning("PhotonNetwork.ReconnectAndRejoin returned false, PhotonNetwork.Reconnect is called instead.");
-                        this.reconnectCalled = PhotonNetwork.Reconnect();
+                        Debug.LogWarning("PhotonNetwork.ReconnectAndRejoin() or PhotonNetwork.Reconnect() returned false, client stays disconnected.");
                     }
-                    if (!this.rejoinCalled && !this.reconnectCalled)
-                    {
-                        Debug.LogError("PhotonNetwork.ReconnectAndRejoin() or PhotonNetwork.Reconnect() returned false, client stays disconnected.");
-                    }
+
                     break;
                 case DisconnectCause.None:
                 case DisconnectCause.OperationNotAllowedInCurrentState:
                 case DisconnectCause.CustomAuthenticationFailed:
                 case DisconnectCause.DisconnectByClientLogic:
-                   /* Debug.Log("calling PhotonNetwork.Reconnect()");
-                    this.reconnectCalled = PhotonNetwork.Reconnect();
-*/
-                    Debug.Log("calling PhotonNetwork.ReconnectAndRejoin()");
-                    this.rejoinCalled = PhotonNetwork.ReconnectAndRejoin();
-                    if (!this.rejoinCalled)
+                    if (!this.inRoom)
                     {
-                        Debug.LogWarning("PhotonNetwork.ReconnectAndRejoin returned false, PhotonNetwork.Reconnect is called instead.");
+                        Debug.Log("calling PhotonNetwork.ReconnectAndRejoin()");
+                        this.rejoinCalled = PhotonNetwork.ReconnectAndRejoin();
+                        if (!this.rejoinCalled)
+                        {
+                            Debug.LogWarning("PhotonNetwork.ReconnectAndRejoin returned false, PhotonNetwork.Reconnect is called instead.");
+                            this.reconnectCalled = PhotonNetwork.Reconnect();
+                        }
+                    }
+                    else
+                    {
+                        Debug.Log("calling PhotonNetwork.Reconnect()");
                         this.reconnectCalled = PhotonNetwork.Reconnect();
                     }
                     if (!this.rejoinCalled && !this.reconnectCalled)
                     {
-                        Debug.LogError("PhotonNetwork.ReconnectAndRejoin() or PhotonNetwork.Reconnect() returned false, client stays disconnected.");
+                        Debug.LogWarning("PhotonNetwork.ReconnectAndRejoin() or PhotonNetwork.Reconnect() returned false, client stays disconnected.");
                     }
 
                     break;
@@ -141,14 +147,28 @@ namespace Photon.Pun.UtilityScripts
         {
             if (this.rejoinCalled)
             {
-                Debug.LogErrorFormat("Quick rejoin failed with error code: {0} & error message: {1}", returnCode, message);
+                Debug.LogWarningFormat("Quick rejoin failed with error code: {0} & error message: {1}", returnCode, message);
                 this.rejoinCalled = false;
+               
+            }
+            if(returnCode == 32758)
+            {
+                GameSetup.GS.DisconnectPlayer();
+                errorMessage.text = "Unable to join the game, " + message + ", reason: TimeExpired";
+                errorMessage.gameObject.SetActive(true);
             }
         }
 
         public override void OnJoinedRoom()
         {
             this.inRoom = true;
+            if (PhotonNetwork.LocalPlayer.HasRejoined)
+            {
+                Debug.Log("Player: " + PhotonNetwork.LocalPlayer.NickName + " rejoined room successful");
+                GameSetup.GS.logoutCalled = false;
+                GameSetup.GS.disconnectCalled = false;
+                GameSetup.GS.setError(false, "Successfully reconnected!");
+            }
             if (this.rejoinCalled)
             {
                 Debug.Log("Rejoin successful");
@@ -159,6 +179,41 @@ namespace Photon.Pun.UtilityScripts
         public override void OnLeftRoom()
         {
             this.inRoom = false;
+        }
+
+        public void recconect()
+        {
+            if (!PhotonNetwork.IsConnected)
+            {
+                Debug.LogWarning("Reconnecting");
+                this.HandleDisconnect(DisconnectCause.DisconnectByServerReasonUnknown);
+
+            }
+            else
+            {
+                Debug.Log("Player is already connected");
+            }
+        }
+
+        public override void OnJoinedLobby()
+        {
+            base.OnJoinedLobby();
+            if (this.reconnectCalled)
+            {
+                Debug.LogWarning("OnLeftRoom inactive:  " + PhotonNetwork.LocalPlayer.IsInactive);
+                Debug.LogWarning("TRY TO REJOIN ROOM");
+                PhotonNetwork.RejoinRoom("room");
+            }
+        }
+
+        public override void OnPlayerEnteredRoom(Player newPlayer)
+        {
+            base.OnPlayerEnteredRoom(newPlayer);
+            /*if (PhotonNetwork.LocalPlayer.HasRejoined)
+            {
+                Debug.LogWarning("TRY TO REJOIN ROOM");
+                PhotonNetwork.RejoinRoom("room");
+            }*/
         }
 
         public override void OnConnectedToMaster()

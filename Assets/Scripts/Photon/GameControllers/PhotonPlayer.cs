@@ -8,10 +8,14 @@ using System;
 public class PhotonPlayer : MonoBehaviour
 {
     public PhotonView PV;
+    public GameObject mySheet;
     public static GameObject myAvatar;
     public static PhotonPlayer player;
 
+
     public int myTeam;
+    public int MyTeam { get => myTeam; set => myTeam = value; }
+
 
     //random list
     //public int[] myRandomNumbers = new int[4];
@@ -33,52 +37,45 @@ public class PhotonPlayer : MonoBehaviour
     void Awake()
     {
         PhotonPlayer.player = this;
-       
+
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        PV = GetComponent<PhotonView>();
-        //Debug.LogWarning("counter " + playerViewsCounter);
-        if (PhotonNetwork.IsMasterClient)
+        if (PhotonNetwork.LocalPlayer.HasRejoined)
         {
+            Debug.Log("PhotonPlayer has rejoined");
+        }
+        else
+        {
+            PV = GetComponent<PhotonView>();
+            //Debug.LogWarning("counter " + playerViewsCounter);
+            if (PhotonNetwork.IsMasterClient)
+            {
+                if (PV.IsMine)
+                {
+                    //randomize list
+                    AllRandomNumbers = randomizeList(randomList);
+                    //send gameSetup list of numbers
+                    GameSetup.GS.SetActiveList(AllRandomNumbers, 0);
+                    GameSetup.GS.SetList(AllRandomNumbers);
+
+                    //Create something to hold the data
+                    var o = new MemoryStream();
+                    //Save the list
+                    bf.Serialize(o, AllRandomNumbers);
+                    //Convert the data to a string
+                    var data = Convert.ToBase64String(o.GetBuffer());
+
+                    //PV.RPC("RPC_GetList", RpcTarget.OthersBuffered, data);
+                }
+            }
+            //call master client to get team
             if (PV.IsMine)
             {
-                //randomize list
-                //Debug.Log("max player in room" + PhotonNetwork.CurrentRoom.MaxPlayers);
-              /*  while (true)
-                {
-                    int num = rng.Next(0, (PhotonNetwork.CurrentRoom.MaxPlayers - 1) * playerViewsCounter);
-                    if (!AllRandomNumbers.Contains(num))
-                    {
-                        AllRandomNumbers.Add(num);
-                    }
-                    if (AllRandomNumbers.Count == ((PhotonNetwork.CurrentRoom.MaxPlayers - 1) * playerViewsCounter))
-                    {
-                        break;
-                    }
-                }*/
-
-                AllRandomNumbers = randomizeList(randomList);
-                //send gameSetup list of numbers
-                GameSetup.GS.SetActiveList(AllRandomNumbers, 0);
-                GameSetup.GS.SetList(AllRandomNumbers);
-
-                //Create something to hold the data
-                var o = new MemoryStream();
-                //Save the list
-                bf.Serialize(o, AllRandomNumbers);
-                //Convert the data to a string
-                var data = Convert.ToBase64String(o.GetBuffer());
-
-                //PV.RPC("RPC_GetList", RpcTarget.OthersBuffered, data);
+                PV.RPC("RPC_GetTeam", RpcTarget.MasterClient);
             }
-        }
-        //call master client to get team
-        if (PV.IsMine)
-        {
-            PV.RPC("RPC_GetTeam", RpcTarget.MasterClient);
         }
     }
 
@@ -108,36 +105,29 @@ public class PhotonPlayer : MonoBehaviour
         }
         else
         {
-            switch(PhotonNetwork.CurrentRoom.MaxPlayers - 1)
+            switch (PhotonNetwork.CurrentRoom.MaxPlayers - 1)
             {
                 case 4:
                 case 5:
                 case 6:
-                    tempList = new List<int>(12) {1,9,0,5,2,7,4,18,8,6,16,10};
+                    tempList = new List<int>(12) { 1, 9, 0, 5, 2, 7, 4, 18, 8, 6, 16, 10 };
                     break;
                 case 7:
-                    tempList = new List<int>(14) {1,9,0,19,2,6,4,18,8,17,16,7,5,10};
+                    tempList = new List<int>(14) { 1, 9, 0, 19, 2, 6, 4, 18, 8, 17, 16, 7, 5, 10 };
                     break;
                 case 8:
-                    tempList = new List<int>(16) {1,9,0,19,2,5,3,6,4,18,8,17,16,7,11,10};
+                    tempList = new List<int>(16) { 1, 9, 0, 19, 2, 5, 3, 6, 4, 18, 8, 17, 16, 7, 11, 10 };
                     break;
                 case 9:
-                    tempList = new List<int>(18) {1, 9, 0, 19, 2, 12, 3, 6, 4, 18, 8, 19, 16, 13, 11, 7, 5, 10};
+                    tempList = new List<int>(18) { 1, 9, 0, 19, 2, 12, 3, 6, 4, 18, 8, 19, 16, 13, 11, 7, 5, 10 };
                     break;
                 case 10:
-                    tempList = new List<int>(20) {1, 19, 0, 12, 2, 6,3,18,4,17,8,13,16,7,11,10,5,14,9,15};
+                    tempList = new List<int>(20) { 1, 19, 0, 12, 2, 6, 3, 18, 4, 17, 8, 13, 16, 7, 11, 10, 5, 14, 9, 15 };
                     break;
                 default:
                     Debug.LogWarning("Nije podeseno za 4");
                     break;
             }
-
-
-            /*for(int i = 0; i < (PhotonNetwork.CurrentRoom.MaxPlayers - 1) * playerViewsCounter; i++)
-            {
-                tempList.Add(i);
-            }*/
-           
             return tempList;
         }
     }
@@ -145,31 +135,35 @@ public class PhotonPlayer : MonoBehaviour
     //call rpc to update view on all clients
     public void sendAll()
     {
-        if (PhotonNetwork.IsMasterClient)
+        PV.RPC("RPC_GameSetupSetVisible", RpcTarget.Others);
+        /*if (PhotonNetwork.IsMasterClient)
         {
             //Debug.LogWarning("Send all recive");
             PV.RPC("RPC_GameSetupSetVisible", RpcTarget.Others);
-        }
+        }*/
     }
 
     [PunRPC]
     void RPC_GetTeam()
     {
-        myTeam = GameSetup.GS.nextPlayerTeam;
-        GameSetup.GS.UpdateTeam();
-
-        //Debug.LogWarning("MASTER GET TEAM" + myTeam.ToString());
-
-        PV.RPC("RPC_SentTeam", RpcTarget.OthersBuffered, myTeam);
-        if (PV.IsMine)
+        if (!PhotonNetwork.LocalPlayer.HasRejoined)
         {
-            //Create something to hold the data
-            var o = new MemoryStream();
-            //Save the list
-            bf.Serialize(o, AllRandomNumbers);
-            var data = Convert.ToBase64String(o.GetBuffer());
-            //send list to other players
-            PV.RPC("RPC_GetList", RpcTarget.OthersBuffered, data);
+            MyTeam = GameSetup.GS.nextPlayerTeam;
+            GameSetup.GS.UpdateTeam();
+
+            //Debug.LogWarning("MASTER GET TEAM" + myTeam.ToString());
+
+            PV.RPC("RPC_SentTeam", RpcTarget.OthersBuffered, MyTeam);
+            if (PV.IsMine)
+            {
+                //Create something to hold the data
+                var o = new MemoryStream();
+                //Save the list
+                bf.Serialize(o, AllRandomNumbers);
+                var data = Convert.ToBase64String(o.GetBuffer());
+                //send list to other players
+                PV.RPC("RPC_GetList", RpcTarget.OthersBuffered, data);
+            }
         }
     }
 
@@ -177,28 +171,35 @@ public class PhotonPlayer : MonoBehaviour
     void RPC_SentTeam(int whichTeam)
     {
         //set Player team
-        myTeam = whichTeam;
+        MyTeam = whichTeam;
     }
 
     [PunRPC]
     void RPC_GetList(string data)
     {
-        if (AllRandomNumbers.Count == 0)
+        if (!PhotonNetwork.LocalPlayer.HasRejoined)
         {
-            //Create an input stream from the string
-            var ins = new MemoryStream(Convert.FromBase64String(data));
+            if (AllRandomNumbers.Count == 0)
+            {
+                //Create an input stream from the string
+                var ins = new MemoryStream(Convert.FromBase64String(data));
 
-            //Read back the data
-            List<int> x = (List<int>)bf.Deserialize(ins);
+                //Read back the data
+                List<int> x = (List<int>)bf.Deserialize(ins);
 
-            //set AllRandomNumbers
-            AllRandomNumbers = x;
+                //set AllRandomNumbers
+                AllRandomNumbers = x;
 
-            //set List for Players
-            GameSetup.GS.SetActiveList(AllRandomNumbers, PhotonRoomCustomMatch.room.myNumberInRoom - 1);
+                //set List for Players
+                GameSetup.GS.SetActiveList(AllRandomNumbers, PhotonRoomCustomMatch.room.myNumberInRoom - 1);
 
-            //GameSetup.GS.SetActiveList(AllRandomNumbers, myTeam);
-            getList = true;
+                //GameSetup.GS.SetActiveList(AllRandomNumbers, myTeam);
+                getList = true;
+            }
+        }
+        else
+        {
+            Debug.Log("Rejoined player try to get list");
         }
     }
 

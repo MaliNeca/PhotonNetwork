@@ -693,6 +693,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isGameLoaded: 0
   currentScene: 0
+  myRoomCode: 
   playersInRoom: 0
   myNumberInRoom: 0
   playerInGame: 0
@@ -741,7 +742,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 609972782}
   m_Father: {fileID: 0}
   m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2753,12 +2755,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 609972780}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 655.25586, y: 541.7249, z: -579.875}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_Father: {fileID: 168472673}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &611154613
 GameObject:
@@ -3062,7 +3064,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 292.1, y: -1038}
+  m_AnchoredPosition: {x: 292.1, y: -1037.3}
   m_SizeDelta: {x: 449.59692, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &631089419
@@ -5850,6 +5852,7 @@ MonoBehaviour:
   rejoinCalled: 0
   reconnectCalled: 0
   inRoom: 0
+  errorMessage: {fileID: 437151298}
 --- !u!4 &1231926509
 Transform:
   m_ObjectHideFlags: 0
@@ -8897,7 +8900,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1872443508
 GameObject:

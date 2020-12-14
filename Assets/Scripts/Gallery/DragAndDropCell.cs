@@ -10,6 +10,9 @@ using TMPro;
 [RequireComponent(typeof(Image))]
 public class DragAndDropCell : MonoBehaviour, IDropHandler
 {
+
+    public bool rejoined = false;
+
     public enum CellType                                                    // Cell types
     {
         Swap,                                                               // Items will be swapped between any cells
@@ -209,7 +212,6 @@ public class DragAndDropCell : MonoBehaviour, IDropHandler
     /// <param name="item">Item.</param>
     private void PlaceItem(DragAndDropItem item)
     {
-
         int itemToSend = item.GetComponent<PhotonView>().ViewID;
         GetComponent<PhotonView>().RPC("PlaceItemSync", RpcTarget.AllBuffered, itemToSend);
     }
@@ -217,20 +219,21 @@ public class DragAndDropCell : MonoBehaviour, IDropHandler
     [PunRPC]
     void PlaceItemSync(int _item)
     {
+
         DragAndDropItem item = null;
-       // Debug.Log("ITEM: " + _item);
         foreach (PhotonView dg in FindObjectsOfType<PhotonView>())
         {
             if (dg.ViewID == _item)
             {
                 item = dg.GetComponent<DragAndDropItem>();
+                break;
             }
         }
         if (item != null)
         {
 
             // Remove current item from this cell
-            DestroyItem();
+            //DestroyItem();
             myDadItem = null;
             DragAndDropCell cell = item.GetComponentInParent<DragAndDropCell>();
 
@@ -244,7 +247,7 @@ public class DragAndDropCell : MonoBehaviour, IDropHandler
                     item.name = itemName;
                 }
                 //Debug.LogWarning("parent 2: " + cell.name);
-               // Debug.LogWarning("evo ga ovde drag");
+                // Debug.LogWarning("evo ga ovde drag");
 
 
                 //set source cell type
@@ -279,12 +282,14 @@ public class DragAndDropCell : MonoBehaviour, IDropHandler
             }
         }
         UpdateBackgroundState();
+
     }
     /// <summary>
     /// Destroy item in this cell
     /// </summary>
     private void DestroyItem()
     {
+        
         UpdateMyItem();
         if (myDadItem != null)
         {

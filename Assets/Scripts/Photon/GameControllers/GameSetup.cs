@@ -22,7 +22,7 @@ public class GameSetup : MonoBehaviour
 
     //master view
     public List<GameObject> playerNumbersList = new List<GameObject>();
-    public GameObject playerNumbers; 
+    public GameObject playerNumbers;
     public GameObject playerOneNumbers;
     public GameObject playerTwoNumbers;
     public GameObject playerThreeNumbers;
@@ -44,6 +44,9 @@ public class GameSetup : MonoBehaviour
 
     public GameObject sheet;
     public Button swapButton;
+    public TMP_InputField errorMessage;
+    public TMP_InputField justMessage;
+
 
     private void OnEnable()
     {
@@ -51,54 +54,80 @@ public class GameSetup : MonoBehaviour
         {
             GameSetup.GS = this;
         }
+        else
+        {
+            if (GameSetup.GS != this)
+            {
+                Object.Destroy(GameSetup.GS);
+                // Destroy(PhotonRoom.room.gameObject);
+                GameSetup.GS = this;
+            }
+        }
+        DontDestroyOnLoad(this.gameObject);
+
     }
+
+
 
     void Start()
     {
+             /* foreach (DragAndDropItem _dp in FindObjectsOfType<DragAndDropItem>()){
+                 if (_dp.name.Equals("2"))
+                 {
+                     ListOfDragingObjects[2] = _dp.GetComponent<PhotonView>();
+                 }
 
-        /*  foreach (PhotonView pv in ListOfDragingObjects)
-          {
-              pv.gameObject.transform.GetComponent<RectTransform>().localPosition = new Vector3(0, 0, 0);
-              pv.gameObject.transform.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 0);
-          }*/
+             }*/
+            /*  foreach (PhotonView pv in ListOfDragingObjects)
+              {
+                  pv.gameObject.transform.GetComponent<RectTransform>().localPosition = new Vector3(0, 0, 0);
+                  pv.gameObject.transform.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 0);
+              }*/
 
-        //scale numbers items in player view
-        if (PhotonNetwork.IsMasterClient)
-        {
-            //set Sheet view position
-            //setGraphic();
-            sheet.transform.SetPositionAndRotation(new Vector3(0, 0, 0), sheet.transform.rotation);
+            //scale numbers items in player view
+            if (PhotonNetwork.IsMasterClient)
+            {
+                //set Sheet view position
+                //setGraphic();
+                sheet.transform.SetPositionAndRotation(new Vector3(0, 0, 0), sheet.transform.rotation);
 
-            //enable views for all students
-            // setAlphaForStudentsView();
+                //enable views for all students
+                // setAlphaForStudentsView();
 
-            //players name visible
-            //setPlayersName();
+                //players name visible
+                //setPlayersName();
 
-            //client view set alpha
-            playerNumbers.transform.GetComponent<CanvasGroup>().alpha = 0;
+                //client view set alpha
+                playerNumbers.transform.GetComponent<CanvasGroup>().alpha = 0;
 
-            //set button active
-            swapButton.gameObject.SetActive(true);
-        }
-        else
-        {
-            sheet.transform.GetComponent<RectTransform>().localPosition = new Vector3(210, 0, 0);
-        }
-        //scaleImages();
-        //activateCellsOnSheet();
-        activateCellsOnSheetPredefine(30);
+                //set button active
+                swapButton.gameObject.SetActive(true);
+
+
+            }
+            else
+            {
+                sheet.transform.GetComponent<RectTransform>().localPosition = new Vector3(210, 0, 0);
+
+            }
+            //scaleImages();
+            //activateCellsOnSheet();
+            activateCellsOnSheetPredefine(30);
+        
 
     }
 
     void Update()
     {
-        if (PhotonNetwork.IsMasterClient)
+        if (!PhotonNetwork.LocalPlayer.HasRejoined)
         {
-            if (numbersSet)
+            if (PhotonNetwork.IsMasterClient)
             {
-                //set items on all client views
-                setClientViews();
+                if (numbersSet)
+                {
+                    //set items on all client views
+                    setClientViews();
+                }
             }
         }
     }
@@ -206,7 +235,6 @@ public class GameSetup : MonoBehaviour
         for (int i = 0; i < maxCells; i++)
         {
             sheet.transform.GetChild(i).gameObject.SetActive(true);
-
         }
     }
 
@@ -216,7 +244,6 @@ public class GameSetup : MonoBehaviour
         for (int i = 0; i < maxCells; i++)
         {
             sheet.transform.GetChild(i).gameObject.SetActive(true);
-
         }
         switch (PhotonNetwork.CurrentRoom.MaxPlayers - 1)
         {
@@ -254,7 +281,7 @@ public class GameSetup : MonoBehaviour
     }
 
     public bool logoutCalled = false;
-
+    public bool disconnectCalled = false;
     public void DisconnectPlayer()
     {
         this.logoutCalled = true;
@@ -268,6 +295,7 @@ public class GameSetup : MonoBehaviour
 
     public void DisconnectPlayerTest()
     {
+        this.disconnectCalled = true;
         StartCoroutine(DisconnectAndReLoad());
     }
 
@@ -275,7 +303,6 @@ public class GameSetup : MonoBehaviour
     {
         PhotonNetwork.Disconnect();
         while (PhotonNetwork.IsConnected) yield return null;
-        //SceneManager.LoadScene(MultiplayerSettings.multiplayerSettings.menuScene);
     }
 
     IEnumerator DisconnectAndLoad()
@@ -311,73 +338,83 @@ public class GameSetup : MonoBehaviour
     //players call to setup their views
     public void SetActiveList(List<int> numbers, int team)
     {
-
-        if (team > 0 && team < PhotonNetwork.CurrentRoom.MaxPlayers)
+        if (PhotonNetwork.LocalPlayer.HasRejoined)
         {
-            for (int i = 0; i < playerViewsCounter; i++)
-            {
-                //enable component for this player
-                playerNumbers.GetComponent<CanvasGroup>().alpha = 0;
-                allPlayersView[team - 1].GetComponent<CanvasGroup>().alpha = 1;
-                allPlayersView[team - 1].GetComponent<CanvasGroup>().interactable = true;
-                allPlayersView[team - 1].GetComponent<CanvasGroup>().blocksRaycasts = true;
-
-                int index = i + ((team - 1) * playerViewsCounter);
-                Vector3 newVector = ListOfDragingObjects[numbers[index]].gameObject.transform.GetComponent<RectTransform>().localPosition;
-
-                GameObject ga = ListOfDragingObjects[numbers[index]].gameObject;
-                ga.transform.GetComponent<DragAndDropItem>().dragDisabled = false;
-                ga.transform.SetParent(allPlayersView[team - 1].gameObject.transform.GetChild(i));
-                ga.transform.GetComponent<RectTransform>().localPosition = newVector;
-                ga.transform.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 0);
-
-
-                //Debug.LogWarning(ListOfDragingObjects[i].ViewID);
-                ListOfDragingObjects[numbers[index]].transform.parent.gameObject.SetActive(true);
-                ListOfDragingObjects[numbers[index]].transform.GetChild(0).gameObject.SetActive(true);
-                ListOfDragingObjects[numbers[index]].transform.GetChild(0).GetComponent<Image>().raycastTarget = true;
-
-                ListOfDragingObjects[numbers[index]].GetComponent<Image>().enabled = false;
-                ListOfDragingObjects[numbers[index]].transform.GetComponentInParent<Transform>().SetAsFirstSibling();
-            }
-
-        }
-        else if (team == 0)
-        {
-            Debug.Log("MASTER");
+            Debug.Log("Player already has active list, because he was reconnected");
         }
         else
         {
-            Debug.Log("Wrong team id");
+            Debug.Log("Player set active list");
+            if (team > 0 && team < PhotonNetwork.CurrentRoom.MaxPlayers)
+            {
+                for (int i = 0; i < playerViewsCounter; i++)
+                {
+                    //enable component for this player
+                    playerNumbers.GetComponent<CanvasGroup>().alpha = 0;
+                    allPlayersView[team - 1].GetComponent<CanvasGroup>().alpha = 1;
+                    allPlayersView[team - 1].GetComponent<CanvasGroup>().interactable = true;
+                    allPlayersView[team - 1].GetComponent<CanvasGroup>().blocksRaycasts = true;
+
+                    int index = i + ((team - 1) * playerViewsCounter);
+                    Vector3 newVector = ListOfDragingObjects[numbers[index]].gameObject.transform.GetComponent<RectTransform>().localPosition;
+
+                    GameObject ga = ListOfDragingObjects[numbers[index]].gameObject;
+                    ga.transform.GetComponent<DragAndDropItem>().dragDisabled = false;
+                    ga.transform.SetParent(allPlayersView[team - 1].gameObject.transform.GetChild(i));
+                    ga.transform.GetComponent<RectTransform>().localPosition = newVector;
+                    ga.transform.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 0);
+
+
+                    //Debug.LogWarning(ListOfDragingObjects[i].ViewID);
+                    ListOfDragingObjects[numbers[index]].transform.parent.gameObject.SetActive(true);
+                    ListOfDragingObjects[numbers[index]].transform.GetChild(0).gameObject.SetActive(true);
+                    ListOfDragingObjects[numbers[index]].transform.GetChild(0).GetComponent<Image>().raycastTarget = true;
+
+                    ListOfDragingObjects[numbers[index]].GetComponent<Image>().enabled = false;
+                    ListOfDragingObjects[numbers[index]].transform.GetComponentInParent<Transform>().SetAsFirstSibling();
+                }
+
+            }
+            else if (team == 0)
+            {
+                Debug.Log("MASTER");
+            }
+            else
+            {
+                Debug.Log("Wrong team id");
+            }
         }
     }
 
     //master call to setup views for all players
     public void setClientViews()
     {
-        numbersSet = false;
-        //enable first all clients items
-        foreach (PhotonView GO in ListOfDragingObjects)
+        if (!PhotonNetwork.LocalPlayer.HasRejoined)
         {
-            GO.gameObject.transform.GetChild(0).gameObject.SetActive(true);
-        }
-
-        //for all players
-        for (int teamID = 1; teamID < PhotonNetwork.CurrentRoom.MaxPlayers; teamID++)
-        {
-            for (int i = 0; i < playerViewsCounter; i++)
+            numbersSet = false;
+            //enable first all clients items
+            foreach (PhotonView GO in ListOfDragingObjects)
             {
-                int index = i + (teamID - 1) * playerViewsCounter;
-                Vector3 newVector = ListOfDragingObjects[allNumbers[index]].gameObject.transform.GetComponent<RectTransform>().localPosition;
+                GO.gameObject.transform.GetChild(0).gameObject.SetActive(true);
+            }
 
-                //new
-                ListOfDragingObjects[allNumbers[index]].transform.parent.gameObject.SetActive(true);
+            //for all players
+            for (int teamID = 1; teamID < PhotonNetwork.CurrentRoom.MaxPlayers; teamID++)
+            {
+                for (int i = 0; i < playerViewsCounter; i++)
+                {
+                    int index = i + (teamID - 1) * playerViewsCounter;
+                    Vector3 newVector = ListOfDragingObjects[allNumbers[index]].gameObject.transform.GetComponent<RectTransform>().localPosition;
 
-                GameObject ga = ListOfDragingObjects[allNumbers[index]].gameObject;
-                ga.transform.GetComponent<DragAndDropItem>().dragDisabled = true;
-                ga.transform.SetParent(allPlayersView[teamID - 1].gameObject.transform.GetChild(i));
-                ga.transform.GetComponent<RectTransform>().localPosition = newVector;
-                ga.transform.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 0);
+                    //new
+                    ListOfDragingObjects[allNumbers[index]].transform.parent.gameObject.SetActive(true);
+
+                    GameObject ga = ListOfDragingObjects[allNumbers[index]].gameObject;
+                    ga.transform.GetComponent<DragAndDropItem>().dragDisabled = true;
+                    ga.transform.SetParent(allPlayersView[teamID - 1].gameObject.transform.GetChild(i));
+                    ga.transform.GetComponent<RectTransform>().localPosition = newVector;
+                    ga.transform.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 0);
+                }
             }
         }
     }
@@ -385,11 +422,17 @@ public class GameSetup : MonoBehaviour
     //master buttonSwap clicked
     public void OnSwapClicked()
     {
-        if (PhotonNetwork.IsMasterClient)
+        PhotonPlayer.player.sendAll();
+
+        /*if (PhotonNetwork.IsMasterClient)
         {
             //Debug.LogWarning("Call rpc");
             PhotonPlayer.player.sendAll();
         }
+        else
+        {
+           
+        }*/
     }
 
     //enable view for all clients
@@ -399,11 +442,34 @@ public class GameSetup : MonoBehaviour
         {
             if (GO.gameObject.transform.GetChild(0) != null)
             {
-              GO.gameObject.transform.GetChild(0).gameObject.SetActive(true);
+                GO.gameObject.transform.GetChild(0).gameObject.SetActive(true);
             }
         }
     }
 
+    public void setError(bool enable, string message)
+    {
+        if (enable)
+        {
+            this.justMessage.gameObject.SetActive(false);
+            this.errorMessage.text = message;
+            this.errorMessage.gameObject.SetActive(true);
+        }
+        else
+        {
+            this.errorMessage.gameObject.SetActive(false);
+            this.justMessage.text = message;
+            this.justMessage.gameObject.SetActive(true);
+            StartCoroutine(DisableMessage());
+        }
 
-   
+    }
+
+    IEnumerator DisableMessage()
+    {
+        yield return new WaitForSeconds(5);
+        if(this.justMessage.gameObject != null)
+        this.justMessage.gameObject.SetActive(false);
+    }
+
 }

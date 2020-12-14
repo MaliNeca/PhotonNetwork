@@ -157,8 +157,9 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
         }
         errorMessage.gameObject.SetActive(false);
         RoomOptions roomOps = new RoomOptions() { IsVisible = true, IsOpen = true, MaxPlayers = (byte)roomSize };
-        roomOps.PlayerTtl = 180000; //60sec
-        roomOps.EmptyRoomTtl = 180000; //60sec
+        roomOps.PlayerTtl = 180000; //180sec
+        roomOps.EmptyRoomTtl = 180000; //180sec
+        roomOps.CleanupCacheOnLeave = false;
 
         RoomText.text = "Send this code to participants. Select then Ctrl-c to copy.";
         WaitingRoom.SetActive(false);
@@ -184,7 +185,7 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
     public void OnRoomSizeChanged(string sizeIn)
     {
         //only number of clients add teacher
-        if(sizeIn.Length == 0)
+        if (sizeIn.Length == 0)
         {
             return;
         }

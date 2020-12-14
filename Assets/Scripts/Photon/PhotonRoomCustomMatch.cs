@@ -15,6 +15,8 @@ public class PhotonRoomCustomMatch : MonoBehaviourPunCallbacks, IInRoomCallbacks
     public bool isGameLoaded;
     public int currentScene;
 
+    public string myRoomCode;
+
     //Player info
     private Player[] photonPlayers;
     public int playersInRoom;
@@ -122,59 +124,64 @@ public class PhotonRoomCustomMatch : MonoBehaviourPunCallbacks, IInRoomCallbacks
     public override void OnJoinedRoom()
     {
 
-            
-        
-       // DisconnectsRecovery.recovery.inRoom = true;
-        if (DisconnectsRecovery.recovery.rejoinCalled)
+
+        if (PhotonNetwork.LocalPlayer.HasRejoined)
         {
             Debug.Log("Rejoin successful match");
-           // DisconnectsRecovery.recovery.reconnectCalled = false;
         }
         else
         {
-            PhotonLobbyCustomMatch.lobby.errorMessage.gameObject.SetActive(false);
-            //sets player data when we join the room
-            base.OnJoinedRoom();
-            Debug.Log("We are in room now");
-            lobbyGameObject.SetActive(false);
-            roomGO.SetActive(true);
-            if (PhotonNetwork.IsMasterClient)
+            if (DisconnectsRecovery.recovery.rejoinCalled)
             {
-                startButton.SetActive(true);
-                //copyButton.SetActive(true);
-                //roomCode.gameObject.SetActive(true);
-                roomCode.text = PhotonNetwork.CurrentRoom.Name;
-
-                //enable text for master
-                roomCodeText.gameObject.SetActive(true);
-                startGameText.gameObject.SetActive(true);
-
-                roomCodeField.gameObject.SetActive(true);
-                roomCodeField.text = PhotonNetwork.CurrentRoom.Name;
+                Debug.Log("Rejoin successful match");
             }
-            //clear current player list
-            ClearPlayerListings();
-            //add all players
-            ListAllPlayers();
-
-            photonPlayers = PhotonNetwork.PlayerList;
-            playersInRoom = photonPlayers.Length;
-            //PlayerID
-            myNumberInRoom = playersInRoom;
-
-            //for delay start only
-            if (MultiplayerSettings.multiplayerSettings.delayStart)
+            else
             {
-                Debug.Log("Displayer players in room out of max players possible (" + playersInRoom + " : " + MultiplayerSettings.multiplayerSettings.maxPlayers + ")");
-                if (playersInRoom > 1)
+                //PhotonLobbyCustomMatch.lobby.errorMessage.gameObject.SetActive(false);
+                //sets player data when we join the room
+                base.OnJoinedRoom();
+                Debug.Log("We are in room now");
+                lobbyGameObject.SetActive(false);
+                roomGO.SetActive(true);
+                if (PhotonNetwork.IsMasterClient)
                 {
-                    readyToCount = true;
+                    startButton.SetActive(true);
+                    //copyButton.SetActive(true);
+                    //roomCode.gameObject.SetActive(true);
+                    roomCode.text = PhotonNetwork.CurrentRoom.Name;
+
+                    //enable text for master
+                    roomCodeText.gameObject.SetActive(true);
+                    startGameText.gameObject.SetActive(true);
+
+                    roomCodeField.gameObject.SetActive(true);
+                    roomCodeField.text = PhotonNetwork.CurrentRoom.Name;
                 }
-                if (playersInRoom == MultiplayerSettings.multiplayerSettings.maxPlayers)
+                myRoomCode = PhotonNetwork.CurrentRoom.Name;
+                //clear current player list
+                ClearPlayerListings();
+                //add all players
+                ListAllPlayers();
+
+                photonPlayers = PhotonNetwork.PlayerList;
+                playersInRoom = photonPlayers.Length;
+                //PlayerID
+                myNumberInRoom = playersInRoom;
+
+                //for delay start only
+                if (MultiplayerSettings.multiplayerSettings.delayStart)
                 {
-                    readyToStart = true;
-                    if (!PhotonNetwork.IsMasterClient) return;
-                    PhotonNetwork.CurrentRoom.IsOpen = false;
+                    Debug.Log("Displayer players in room out of max players possible (" + playersInRoom + " : " + MultiplayerSettings.multiplayerSettings.maxPlayers + ")");
+                    if (playersInRoom > 1)
+                    {
+                        readyToCount = true;
+                    }
+                    if (playersInRoom == MultiplayerSettings.multiplayerSettings.maxPlayers)
+                    {
+                        readyToStart = true;
+                        if (!PhotonNetwork.IsMasterClient) return;
+                        PhotonNetwork.CurrentRoom.IsOpen = false;
+                    }
                 }
             }
         }
@@ -196,39 +203,43 @@ public class PhotonRoomCustomMatch : MonoBehaviourPunCallbacks, IInRoomCallbacks
     //add all players in room on list
     void ListAllPlayers()
     {
-        if (PhotonNetwork.InRoom)
-        {
-            foreach (Player player in PhotonNetwork.PlayerList)
+        if (!PhotonNetwork.LocalPlayer.HasRejoined)
+            if (PhotonNetwork.InRoom)
             {
-                GameObject tempListing = Instantiate(playerListingPrefab, playersPanel);
-                Text tempText = tempListing.transform.GetChild(0).GetComponent<Text>();
-                tempText.text = player.NickName;
+                foreach (Player player in PhotonNetwork.PlayerList)
+                {
+                    GameObject tempListing = Instantiate(playerListingPrefab, playersPanel);
+                    Text tempText = tempListing.transform.GetChild(0).GetComponent<Text>();
+                    tempText.text = player.NickName;
+                }
             }
-        }
     }
 
     //add player to room list
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        base.OnPlayerEnteredRoom(newPlayer);
-        Debug.Log("A new player has joinded the room");
-        ClearPlayerListings();
-        ListAllPlayers();
-
-        photonPlayers = PhotonNetwork.PlayerList;
-        playersInRoom++;
-        if (MultiplayerSettings.multiplayerSettings.delayStart)
+        if (!PhotonNetwork.LocalPlayer.HasRejoined)
         {
-            Debug.Log("Displayer players in room out of max players possible (" + playersInRoom + " : " + MultiplayerSettings.multiplayerSettings.maxPlayers + ")");
-            if (playersInRoom > 1)
+            base.OnPlayerEnteredRoom(newPlayer);
+            Debug.Log("A new player has joinded the room");
+            ClearPlayerListings();
+            ListAllPlayers();
+
+            photonPlayers = PhotonNetwork.PlayerList;
+            playersInRoom++;
+            if (MultiplayerSettings.multiplayerSettings.delayStart)
             {
-                readyToCount = true;
-            }
-            if (playersInRoom == MultiplayerSettings.multiplayerSettings.maxPlayers)
-            {
-                readyToStart = true;
-                if (!PhotonNetwork.IsMasterClient) return;
-                PhotonNetwork.CurrentRoom.IsOpen = false;
+                Debug.Log("Displayer players in room out of max players possible (" + playersInRoom + " : " + MultiplayerSettings.multiplayerSettings.maxPlayers + ")");
+                if (playersInRoom > 1)
+                {
+                    readyToCount = true;
+                }
+                if (playersInRoom == MultiplayerSettings.multiplayerSettings.maxPlayers)
+                {
+                    readyToStart = true;
+                    if (!PhotonNetwork.IsMasterClient) return;
+                    //PhotonNetwork.CurrentRoom.IsOpen = false;
+                }
             }
         }
     }
@@ -250,7 +261,7 @@ public class PhotonRoomCustomMatch : MonoBehaviourPunCallbacks, IInRoomCallbacks
         }
         else
         {
-            PhotonNetwork.CurrentRoom.IsOpen = false;
+            //PhotonNetwork.CurrentRoom.IsOpen = false;
         }
         PhotonNetwork.LoadLevel(MultiplayerSettings.multiplayerSettings.multiplayerScene);
     }
@@ -291,6 +302,7 @@ public class PhotonRoomCustomMatch : MonoBehaviourPunCallbacks, IInRoomCallbacks
         playerInGame++;
         if (playerInGame == PhotonNetwork.PlayerList.Length)
         {
+            Debug.LogWarning("CALL CREATING PLAYER FOR ALL");
             PV.RPC("RPC_CreatePlayer", RpcTarget.All);
         }
     }
@@ -299,7 +311,7 @@ public class PhotonRoomCustomMatch : MonoBehaviourPunCallbacks, IInRoomCallbacks
     private void RPC_CreatePlayer()
     {
         //creates player network controller but not player charachter
-        PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PhotonNetworkPlayer"), transform.position, Quaternion.identity, 0);
+        PhotonNetwork.InstantiateRoomObject(Path.Combine("PhotonPrefabs", "PhotonNetworkPlayer"), transform.position, Quaternion.identity, 0);
     }
 
     //disconnect player
@@ -316,19 +328,19 @@ public class PhotonRoomCustomMatch : MonoBehaviourPunCallbacks, IInRoomCallbacks
     public void OnCopyButtonClicked()
     {
         //PhotonNetwork.CurrentRoom.Name.CopyToClipboard();
-       
+
         WebGLCopyAndPaste webGLCopy = new WebGLCopyAndPaste();
         webGLCopy.ReceivePaste(PhotonNetwork.CurrentRoom.Name);
         //webGLCopy.GetClipboard("C");
         //webGLCopy.ReceivePaste(PhotonNetwork.CurrentRoom.Name);
-        
+
         Debug.Log(PhotonNetwork.CurrentRoom.Name);
     }
 }
 
 //class for Clipboard
 public static class ClipboardExtension
-{   
+{
     //copy room Code to clipboard
     public static void CopyToClipboard(this string str)
     {
