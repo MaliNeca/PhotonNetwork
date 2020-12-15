@@ -12,7 +12,7 @@ namespace Photon.Pun.UtilityScripts
     public class DisconnectsRecovery : MonoBehaviourPunCallbacks
     {
         public static DisconnectsRecovery recovery;
-       
+
         public bool rejoinCalled;
 
         public bool reconnectCalled;
@@ -23,7 +23,7 @@ namespace Photon.Pun.UtilityScripts
 
         private DisconnectCause previousDisconnectCause;
 
-        
+
 
         private void Awake()
         {
@@ -73,7 +73,7 @@ namespace Photon.Pun.UtilityScripts
             }
             this.inRoom = false;
             this.previousDisconnectCause = cause;
-           
+
 
         }
 
@@ -149,12 +149,12 @@ namespace Photon.Pun.UtilityScripts
             {
                 Debug.LogWarningFormat("Quick rejoin failed with error code: {0} & error message: {1}", returnCode, message);
                 this.rejoinCalled = false;
-               
+
             }
-            if(returnCode == 32758)
+            if (returnCode == 32758 && GameSetup.GS != null)
             {
                 GameSetup.GS.DisconnectPlayer();
-                errorMessage.text = "Unable to join the game, " + message + ", reason: TimeExpired";
+                errorMessage.text = "Unable to join the game, " + message;
                 errorMessage.gameObject.SetActive(true);
             }
         }

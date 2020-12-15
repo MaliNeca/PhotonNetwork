@@ -133,7 +133,12 @@ public class DragAndDropItem : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         {
             if (item.transform.parent.parent.CompareTag("Sheet"))
             {
+                item.transform.GetChild(0).transform.localScale = new Vector3(1.3f, 1.3f, 1.3f);
                 item.transform.GetComponentInChildren<TextMeshProUGUI>().text = name;
+            }
+            else
+            {
+                item.transform.GetChild(0).transform.localScale = new Vector3(2.6f, 2.6f, 2.6f);
             }
         }
     }

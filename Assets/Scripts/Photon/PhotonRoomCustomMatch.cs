@@ -44,6 +44,10 @@ public class PhotonRoomCustomMatch : MonoBehaviourPunCallbacks, IInRoomCallbacks
 
     public GameObject roomCodeText;
     public GameObject startGameText;
+    public GameObject waitGameText;
+    public Button startGameButton;
+    public GameObject gameLobbyText;
+    public GameObject waitMasterText;
 
 
     private void Awake()
@@ -143,6 +147,10 @@ public class PhotonRoomCustomMatch : MonoBehaviourPunCallbacks, IInRoomCallbacks
                 Debug.Log("We are in room now");
                 lobbyGameObject.SetActive(false);
                 roomGO.SetActive(true);
+
+                gameLobbyText.SetActive(true);
+                
+
                 if (PhotonNetwork.IsMasterClient)
                 {
                     startButton.SetActive(true);
@@ -156,6 +164,10 @@ public class PhotonRoomCustomMatch : MonoBehaviourPunCallbacks, IInRoomCallbacks
 
                     roomCodeField.gameObject.SetActive(true);
                     roomCodeField.text = PhotonNetwork.CurrentRoom.Name;
+                }
+                else
+                {
+                    waitMasterText.SetActive(true);
                 }
                 myRoomCode = PhotonNetwork.CurrentRoom.Name;
                 //clear current player list
@@ -252,7 +264,8 @@ public class PhotonRoomCustomMatch : MonoBehaviourPunCallbacks, IInRoomCallbacks
             Debug.LogWarning("Not enough players, room size is: " + PhotonNetwork.CurrentRoom.MaxPlayers);
             return;
         }*/
-
+        waitGameText.gameObject.SetActive(true);
+        startGameButton.interactable = false;
         isGameLoaded = true;
         if (!PhotonNetwork.IsMasterClient) return;
         if (MultiplayerSettings.multiplayerSettings.delayStart)

@@ -110,7 +110,7 @@ public class GameSetup : MonoBehaviour
                 sheet.transform.GetComponent<RectTransform>().localPosition = new Vector3(210, 0, 0);
 
             }
-            //scaleImages();
+            scaleImages();
             //activateCellsOnSheet();
             activateCellsOnSheetPredefine(30);
         
@@ -197,15 +197,7 @@ public class GameSetup : MonoBehaviour
     {
         for (int i = 0; i < ListOfDragingObjects.Count; i++)
         {
-            if (i < 10)
-            {
-                ListOfDragingObjects[i].transform.GetChild(0).transform.GetComponent<RectTransform>().localScale = new Vector3(0.7f, 0.7f, 0.7f);
-
-            }
-            else
-            {
-                ListOfDragingObjects[i].transform.GetChild(0).transform.GetComponent<RectTransform>().localScale = new Vector3(0.8f, 0.8f, 0.8f);
-            }
+            ListOfDragingObjects[i].transform.GetChild(0).transform.localScale = new Vector3(2.6f, 2.6f, 2.6f);
         }
     }
 
@@ -443,28 +435,38 @@ public class GameSetup : MonoBehaviour
             if (GO.gameObject.transform.GetChild(0) != null)
             {
                 GO.gameObject.transform.GetChild(0).gameObject.SetActive(true);
+                GO.transform.GetComponent<DragAndDropItem>().dragDisabled = true;
             }
         }
     }
 
+    //display error message
     public void setError(bool enable, string message)
     {
-        if (enable)
+        if (enable )
         {
-            this.justMessage.gameObject.SetActive(false);
-            this.errorMessage.text = message;
-            this.errorMessage.gameObject.SetActive(true);
+            if(this.justMessage.gameObject != null)
+            {
+                this.justMessage.gameObject.SetActive(false);
+                this.errorMessage.text = message;
+                this.errorMessage.gameObject.SetActive(true);
+            }
+           
         }
         else
         {
-            this.errorMessage.gameObject.SetActive(false);
-            this.justMessage.text = message;
-            this.justMessage.gameObject.SetActive(true);
-            StartCoroutine(DisableMessage());
+            if (this.justMessage.gameObject != null)
+            {
+                this.errorMessage.gameObject.SetActive(false);
+                this.justMessage.text = message;
+                this.justMessage.gameObject.SetActive(true);
+                StartCoroutine(DisableMessage());
+            }
         }
 
     }
 
+    //disapear error message after 5 sec
     IEnumerator DisableMessage()
     {
         yield return new WaitForSeconds(5);

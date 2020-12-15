@@ -38,6 +38,13 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
     public InputField teacherNameIF;
     public InputField roomNameIF;
 
+    public InputField playerNameIF;
+    public GameObject GameLobbyText;
+    public TextMeshProUGUI RoomText;
+
+    public Button createRoomButton;
+    public GameObject waitCreateRoomText;
+
     private void Awake()
     {
         //creates the singleton, lives withing the Main menu scene.
@@ -131,7 +138,7 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
     }
 
 
-    public GameObject GameLobbyText;
+    
     //create new Room
     public void CreateRoom()
     {
@@ -156,21 +163,30 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
             errorMessage.gameObject.SetActive(true);
             return;
         }
+        //disable create button
+        createRoomButton.interactable = false;
+        waitCreateRoomText.SetActive(true);
         errorMessage.gameObject.SetActive(false);
+
+
         RoomOptions roomOps = new RoomOptions() { IsVisible = true, IsOpen = true, MaxPlayers = (byte)roomSize };
         roomOps.PlayerTtl = 180000; //180sec
         roomOps.EmptyRoomTtl = 180000; //180sec
         roomOps.CleanupCacheOnLeave = false;
 
         RoomText.text = "Send this code to participants. Select then Ctrl-c to copy.";
-        /* RoomCodeText.SetActive(true);
-         StartGameText.SetActive(true);*/
+       
         PhotonNetwork.CreateRoom(roomName, roomOps);
-        GameLobbyText.SetActive(true);
+
+        
     }
 
     public override void OnCreateRoomFailed(short returnCode, string message)
     {
+        errorMessage.text = "Tried to create a new room but failed, \nthere must be a room with the same name";
+        errorMessage.gameObject.SetActive(true);
+        createRoomButton.interactable = true;
+        waitCreateRoomText.SetActive(false);
         Debug.Log("Tried to create a new room but failed, there must be a room with the same name");
     }
 
@@ -209,19 +225,23 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
             PhotonNetwork.JoinLobby();
         }
     }
-    public TextMeshProUGUI RoomText;
+    
     
     //join room with code
     public void JoinRoomOnClick()
     {
-
-        if (roomCode.Length != 0)
+        if(playerNameIF.text.Length == 0)
+        {
+            errorMessage.text = "Insert your name.";
+            errorMessage.gameObject.SetActive(true);
+        }
+        else if (roomCode.Length != 0)
         {
             errorMessage.gameObject.SetActive(false);
             RoomText.text = "Please wait organiser to start the game.";
             RoomCodeText.SetActive(false);
             StartGameText.SetActive(false);
-            GameLobbyText.SetActive(true);
+           // GameLobbyText.SetActive(true);
             PhotonNetwork.JoinRoom(roomCode);
         }
         else
