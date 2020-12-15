@@ -131,6 +131,7 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
     }
 
 
+    public GameObject GameLobbyText;
     //create new Room
     public void CreateRoom()
     {
@@ -162,10 +163,10 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
         roomOps.CleanupCacheOnLeave = false;
 
         RoomText.text = "Send this code to participants. Select then Ctrl-c to copy.";
-        WaitingRoom.SetActive(false);
         /* RoomCodeText.SetActive(true);
          StartGameText.SetActive(true);*/
         PhotonNetwork.CreateRoom(roomName, roomOps);
+        GameLobbyText.SetActive(true);
     }
 
     public override void OnCreateRoomFailed(short returnCode, string message)
@@ -209,7 +210,7 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
         }
     }
     public TextMeshProUGUI RoomText;
-    public GameObject WaitingRoom;
+    
     //join room with code
     public void JoinRoomOnClick()
     {
@@ -218,9 +219,9 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
         {
             errorMessage.gameObject.SetActive(false);
             RoomText.text = "Please wait organiser to start the game.";
-            WaitingRoom.SetActive(true);
             RoomCodeText.SetActive(false);
             StartGameText.SetActive(false);
+            GameLobbyText.SetActive(true);
             PhotonNetwork.JoinRoom(roomCode);
         }
         else
@@ -234,6 +235,7 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
     {
         base.OnJoinRoomFailed(returnCode, message);
         errorMessage.text = "Wrong room code.";
+        GameLobbyText.SetActive(false);
         errorMessage.gameObject.SetActive(true);
     }
 
@@ -243,7 +245,6 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
         if (roomCode.Length != 0)
         {
             //RoomText.text = "Please wait organiser to start the game.";
-            WaitingRoom.SetActive(true);
             RoomCodeText.SetActive(false);
             StartGameText.SetActive(false);
             PhotonNetwork.RejoinRoom(roomCode);
