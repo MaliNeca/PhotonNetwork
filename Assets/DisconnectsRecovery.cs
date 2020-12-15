@@ -79,68 +79,87 @@ namespace Photon.Pun.UtilityScripts
 
         private void HandleDisconnect(DisconnectCause cause)
         {
-            switch (cause)
+            if (!this.inRoom)
             {
-                // cases that we can recover from
-                case DisconnectCause.ServerTimeout:
-                case DisconnectCause.Exception:
-                case DisconnectCause.ClientTimeout:
-                case DisconnectCause.DisconnectByServerLogic:
-                case DisconnectCause.AuthenticationTicketExpired:
-                case DisconnectCause.DisconnectByServerReasonUnknown:
-                    if (!this.inRoom)
-                    {
-                        Debug.Log("calling PhotonNetwork.ReconnectAndRejoin()");
-                        this.rejoinCalled = PhotonNetwork.ReconnectAndRejoin();
-                        if (!this.rejoinCalled)
-                        {
-                            Debug.LogWarning("PhotonNetwork.ReconnectAndRejoin returned false, PhotonNetwork.Reconnect is called instead.");
-                            this.reconnectCalled = PhotonNetwork.Reconnect();
-                        }
-                    }
-                    else
-                    {
-                        Debug.Log("calling PhotonNetwork.Reconnect()");
-                        this.reconnectCalled = PhotonNetwork.Reconnect();
-                    }
-                    if (!this.rejoinCalled && !this.reconnectCalled)
-                    {
-                        Debug.LogWarning("PhotonNetwork.ReconnectAndRejoin() or PhotonNetwork.Reconnect() returned false, client stays disconnected.");
-                    }
-
-                    break;
-                case DisconnectCause.None:
-                case DisconnectCause.OperationNotAllowedInCurrentState:
-                case DisconnectCause.CustomAuthenticationFailed:
-                case DisconnectCause.DisconnectByClientLogic:
-                    if (!this.inRoom)
-                    {
-                        Debug.Log("calling PhotonNetwork.ReconnectAndRejoin()");
-                        this.rejoinCalled = PhotonNetwork.ReconnectAndRejoin();
-                        if (!this.rejoinCalled)
-                        {
-                            Debug.LogWarning("PhotonNetwork.ReconnectAndRejoin returned false, PhotonNetwork.Reconnect is called instead.");
-                            this.reconnectCalled = PhotonNetwork.Reconnect();
-                        }
-                    }
-                    else
-                    {
-                        Debug.Log("calling PhotonNetwork.Reconnect()");
-                        this.reconnectCalled = PhotonNetwork.Reconnect();
-                    }
-                    if (!this.rejoinCalled && !this.reconnectCalled)
-                    {
-                        Debug.LogWarning("PhotonNetwork.ReconnectAndRejoin() or PhotonNetwork.Reconnect() returned false, client stays disconnected.");
-                    }
-
-                    break;
-                case DisconnectCause.InvalidAuthentication:
-                case DisconnectCause.ExceptionOnConnect:
-                case DisconnectCause.MaxCcuReached:
-                case DisconnectCause.InvalidRegion:
-                    Debug.LogErrorFormat("Disconnection we cannot automatically recover from, cause: {0}, report it if you think auto recovery is still possible", cause);
-                    break;
+                Debug.Log("calling PhotonNetwork.ReconnectAndRejoin()");
+                this.rejoinCalled = PhotonNetwork.ReconnectAndRejoin();
+                if (!this.rejoinCalled)
+                {
+                    Debug.LogWarning("PhotonNetwork.ReconnectAndRejoin returned false, PhotonNetwork.Reconnect is called instead.");
+                    this.reconnectCalled = PhotonNetwork.Reconnect();
+                }
             }
+            else
+            {
+                Debug.Log("calling PhotonNetwork.Reconnect()");
+                this.reconnectCalled = PhotonNetwork.Reconnect();
+            }
+            if (!this.rejoinCalled && !this.reconnectCalled)
+            {
+                Debug.LogWarning("PhotonNetwork.ReconnectAndRejoin() or PhotonNetwork.Reconnect() returned false, client stays disconnected.");
+            }
+            /* switch (cause)
+             {
+                 // cases that we can recover from
+                 case DisconnectCause.ServerTimeout:
+                 case DisconnectCause.Exception:
+                 case DisconnectCause.ClientTimeout:
+                 case DisconnectCause.DisconnectByServerLogic:
+                 case DisconnectCause.AuthenticationTicketExpired:
+                 case DisconnectCause.DisconnectByServerReasonUnknown:
+                     if (!this.inRoom)
+                     {
+                         Debug.Log("calling PhotonNetwork.ReconnectAndRejoin()");
+                         this.rejoinCalled = PhotonNetwork.ReconnectAndRejoin();
+                         if (!this.rejoinCalled)
+                         {
+                             Debug.LogWarning("PhotonNetwork.ReconnectAndRejoin returned false, PhotonNetwork.Reconnect is called instead.");
+                             this.reconnectCalled = PhotonNetwork.Reconnect();
+                         }
+                     }
+                     else
+                     {
+                         Debug.Log("calling PhotonNetwork.Reconnect()");
+                         this.reconnectCalled = PhotonNetwork.Reconnect();
+                     }
+                     if (!this.rejoinCalled && !this.reconnectCalled)
+                     {
+                         Debug.LogWarning("PhotonNetwork.ReconnectAndRejoin() or PhotonNetwork.Reconnect() returned false, client stays disconnected.");
+                     }
+
+                     break;
+                 case DisconnectCause.None:
+                 case DisconnectCause.OperationNotAllowedInCurrentState:
+                 case DisconnectCause.CustomAuthenticationFailed:
+                 case DisconnectCause.DisconnectByClientLogic:
+                     if (!this.inRoom)
+                     {
+                         Debug.Log("calling PhotonNetwork.ReconnectAndRejoin()");
+                         this.rejoinCalled = PhotonNetwork.ReconnectAndRejoin();
+                         if (!this.rejoinCalled)
+                         {
+                             Debug.LogWarning("PhotonNetwork.ReconnectAndRejoin returned false, PhotonNetwork.Reconnect is called instead.");
+                             this.reconnectCalled = PhotonNetwork.Reconnect();
+                         }
+                     }
+                     else
+                     {
+                         Debug.Log("calling PhotonNetwork.Reconnect()");
+                         this.reconnectCalled = PhotonNetwork.Reconnect();
+                     }
+                     if (!this.rejoinCalled && !this.reconnectCalled)
+                     {
+                         Debug.LogWarning("PhotonNetwork.ReconnectAndRejoin() or PhotonNetwork.Reconnect() returned false, client stays disconnected.");
+                     }
+
+                     break;
+                 case DisconnectCause.InvalidAuthentication:
+                 case DisconnectCause.ExceptionOnConnect:
+                 case DisconnectCause.MaxCcuReached:
+                 case DisconnectCause.InvalidRegion:
+                     Debug.LogWarningFormat("Disconnection we cannot automatically recover from, cause: {0}, report it if you think auto recovery is still possible", cause);
+                     break;
+             }*/
         }
 
         public override void OnJoinRoomFailed(short returnCode, string message)
