@@ -43,7 +43,7 @@ public class PhotonRoomCustomMatch : MonoBehaviourPunCallbacks, IInRoomCallbacks
     public GameObject lobbyController;
 
     public GameObject roomCodeText;
-    public GameObject startGameText;
+   
     public GameObject waitGameText;
     public Button startGameButton;
     public GameObject gameLobbyText;
@@ -124,6 +124,7 @@ public class PhotonRoomCustomMatch : MonoBehaviourPunCallbacks, IInRoomCallbacks
         SceneManager.sceneLoaded -= OnSceneFinishedLoading;
     }
 
+    public GameObject GamePanel;
     //player join room
     public override void OnJoinedRoom()
     {
@@ -156,18 +157,28 @@ public class PhotonRoomCustomMatch : MonoBehaviourPunCallbacks, IInRoomCallbacks
                     startButton.SetActive(true);
                     //copyButton.SetActive(true);
                     //roomCode.gameObject.SetActive(true);
+                    GamePanel.SetActive(true);
+                    GamePanel.transform.GetChild(0).gameObject.SetActive(true);
+                    GamePanel.transform.GetChild(1).gameObject.SetActive(true);
+                    GamePanel.transform.GetChild(2).gameObject.SetActive(true);
+                    
                     roomCode.text = PhotonNetwork.CurrentRoom.Name;
 
                     //enable text for master
                     roomCodeText.gameObject.SetActive(true);
-                    startGameText.gameObject.SetActive(true);
+                    
 
                     roomCodeField.gameObject.SetActive(true);
                     roomCodeField.text = PhotonNetwork.CurrentRoom.Name;
-                }
+                }   
                 else
                 {
                     waitMasterText.SetActive(true);
+                    GamePanel.SetActive(true);
+                    GamePanel.transform.GetChild(0).gameObject.SetActive(false);
+                    GamePanel.transform.GetChild(1).gameObject.SetActive(false);
+                    GamePanel.transform.GetChild(2).gameObject.SetActive(false);
+                    
                 }
                 myRoomCode = PhotonNetwork.CurrentRoom.Name;
                 //clear current player list
@@ -179,6 +190,7 @@ public class PhotonRoomCustomMatch : MonoBehaviourPunCallbacks, IInRoomCallbacks
                 playersInRoom = photonPlayers.Length;
                 //PlayerID
                 myNumberInRoom = playersInRoom;
+               
 
                 //for delay start only
                 if (MultiplayerSettings.multiplayerSettings.delayStart)

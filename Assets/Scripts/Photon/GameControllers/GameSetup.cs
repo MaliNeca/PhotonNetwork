@@ -89,7 +89,7 @@ public class GameSetup : MonoBehaviour
             {
                 //set Sheet view position
                 //setGraphic();
-                sheet.transform.SetPositionAndRotation(new Vector3(0, 0, 0), sheet.transform.rotation);
+               // sheet.transform.SetPositionAndRotation(new Vector3(0, 0, 0), sheet.transform.rotation);
 
                 //enable views for all students
                 // setAlphaForStudentsView();
@@ -107,7 +107,7 @@ public class GameSetup : MonoBehaviour
             }
             else
             {
-                sheet.transform.GetComponent<RectTransform>().localPosition = new Vector3(210, 0, 0);
+               // sheet.transform.GetComponent<RectTransform>().localPosition = new Vector3(210, 0, 0);
 
             }
             scaleImages();
@@ -137,8 +137,8 @@ public class GameSetup : MonoBehaviour
     {
         //sheet view 
         //sheet.transform.SetPositionAndRotation(new Vector3(-449, 374, 0), sheet.transform.rotation);
-        sheet.transform.GetComponent<RectTransform>().sizeDelta = new Vector2(800, 800);
-        sheet.transform.GetComponent<GridLayoutGroup>().cellSize = new Vector2(140, 140);
+       
+       // sheet.transform.GetComponent<GridLayoutGroup>().cellSize = new Vector2(140, 140);
 
         //players view
         //for p1

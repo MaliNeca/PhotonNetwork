@@ -31,19 +31,20 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
     private static int maxRoomSize = 11;
 
     public GameObject RoomCodeText;
-    public GameObject StartGameText;
+    
 
     public TMP_InputField errorMessage;
 
-    public InputField teacherNameIF;
-    public InputField roomNameIF;
+    public TMP_InputField teacherNameIF;
+    public TMP_InputField roomNameIF;
 
-    public InputField playerNameIF;
+    public TMP_InputField playerNameIF;
     public GameObject GameLobbyText;
     public TextMeshProUGUI RoomText;
 
     public Button createRoomButton;
     public GameObject waitCreateRoomText;
+    
 
     private void Awake()
     {
@@ -168,14 +169,14 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
         waitCreateRoomText.SetActive(true);
         errorMessage.gameObject.SetActive(false);
 
-
+        
         RoomOptions roomOps = new RoomOptions() { IsVisible = true, IsOpen = true, MaxPlayers = (byte)roomSize };
         roomOps.PlayerTtl = 180000; //180sec
         roomOps.EmptyRoomTtl = 180000; //180sec
         roomOps.CleanupCacheOnLeave = false;
 
         RoomText.text = "Send this code to participants. Select then Ctrl-c to copy.";
-       
+        
         PhotonNetwork.CreateRoom(roomName, roomOps);
 
         
@@ -240,7 +241,7 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
             errorMessage.gameObject.SetActive(false);
             RoomText.text = "Please wait organiser to start the game.";
             RoomCodeText.SetActive(false);
-            StartGameText.SetActive(false);
+            
            // GameLobbyText.SetActive(true);
             PhotonNetwork.JoinRoom(roomCode);
         }
@@ -251,6 +252,7 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
         }
     }
 
+    
     public override void OnJoinRoomFailed(short returnCode, string message)
     {
         base.OnJoinRoomFailed(returnCode, message);
@@ -266,7 +268,6 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
         {
             //RoomText.text = "Please wait organiser to start the game.";
             RoomCodeText.SetActive(false);
-            StartGameText.SetActive(false);
             PhotonNetwork.RejoinRoom(roomCode);
         }
     }

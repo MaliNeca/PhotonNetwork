@@ -59,6 +59,7 @@ public class PhotonLobby : MonoBehaviourPunCallbacks
         CreateRoom();
     }
 
+  
     //start game button
     public void OnStartButtonClicked()
     {
@@ -73,7 +74,7 @@ public class PhotonLobby : MonoBehaviourPunCallbacks
         startButton.SetActive(true);
         PhotonNetwork.LeaveRoom();
     }
-
+    
 
     // Update is called once per frame
     void Update()

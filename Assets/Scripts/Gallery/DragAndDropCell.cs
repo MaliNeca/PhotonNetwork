@@ -40,9 +40,9 @@ public class DragAndDropCell : MonoBehaviour, IDropHandler
     [Tooltip("Functional type of this cell")]
     public CellType cellType = CellType.Swap;                               // Special type of this cell
     [Tooltip("Sprite color for empty cell")]
-    public Color empty = new Color();                                       // Sprite color for empty cell
+    public Sprite empty;                              // Sprite color for empty cell
     [Tooltip("Sprite color for filled cell")]
-    public Color full = new Color();                                        // Sprite color for filled cell
+    public Sprite full;                          // Sprite color for filled cell
     [Tooltip("This cell has unlimited amount of items")]
     public bool unlimitedSource = false;                                    // Item from this cell will be cloned on drag start
 
@@ -365,7 +365,7 @@ public class DragAndDropCell : MonoBehaviour, IDropHandler
         Image bg = GetComponent<Image>();
         if (bg != null)
         {
-            bg.color = myDadItem != null ? full : empty;
+            bg.sprite = myDadItem != null ? full : empty;
         }
     }
 
