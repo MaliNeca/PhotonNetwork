@@ -1,4 +1,5 @@
 ﻿using Photon.Pun;
+using Photon.Pun.UtilityScripts;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -285,6 +286,11 @@ public class GameSetup : MonoBehaviour
         StartCoroutine(DisconnectAndLoad());
     }
 
+    public void ReConnectPlayer()
+    {
+        DisconnectsRecovery.recovery.recconect();
+    }
+
     public void DisconnectPlayerTest()
     {
         this.disconnectCalled = true;
@@ -445,7 +451,7 @@ public class GameSetup : MonoBehaviour
     {
         if (enable )
         {
-            if(this.justMessage.gameObject != null)
+            if(this.justMessage != null)
             {
                 this.justMessage.gameObject.SetActive(false);
                 this.errorMessage.text = message;
@@ -455,7 +461,7 @@ public class GameSetup : MonoBehaviour
         }
         else
         {
-            if (this.justMessage.gameObject != null)
+            if (this.justMessage != null)
             {
                 this.errorMessage.gameObject.SetActive(false);
                 this.justMessage.text = message;
