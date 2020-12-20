@@ -46,34 +46,40 @@ namespace Photon.Pun.UtilityScripts
 
         public override void OnDisconnected(DisconnectCause cause)
         {
+            
+            if (!PhotonRoomCustomMatch.room.backButtonCreateRoomPressed)
+            {
+                Debug.LogFormat("OnDisconnected(cause={0}) ClientState={1} PeerState={2}",
+                                cause,
+                                PhotonNetwork.NetworkingClient.State,
+                                PhotonNetwork.NetworkingClient.LoadBalancingPeer.PeerState);
+                if (this.rejoinCalled)
+                {
+                    Debug.LogWarningFormat("Rejoin failed, client disconnected, causes; prev.:{0} current:{1}", this.previousDisconnectCause, cause);
+                    this.rejoinCalled = false;
+                }
+                else if (this.reconnectCalled)
+                {
+                    Debug.LogWarningFormat("Reconnect failed, client disconnected, causes; prev.:{0} current:{1}", this.previousDisconnectCause, cause);
+                    this.reconnectCalled = false;
+                }
+                if (GameSetup.GS != null)
+                {
+                    if (!GameSetup.GS.logoutCalled && !GameSetup.GS.disconnectCalled)
+                    {
+                        GameSetup.GS.setError(true, "Player disconnected. \nTrying to reconnect...");
 
-            Debug.LogFormat("OnDisconnected(cause={0}) ClientState={1} PeerState={2}",
-                            cause,
-                            PhotonNetwork.NetworkingClient.State,
-                            PhotonNetwork.NetworkingClient.LoadBalancingPeer.PeerState);
-            if (this.rejoinCalled)
-            {
-                Debug.LogWarningFormat("Rejoin failed, client disconnected, causes; prev.:{0} current:{1}", this.previousDisconnectCause, cause);
-                this.rejoinCalled = false;
-            }
-            else if (this.reconnectCalled)
-            {
-                Debug.LogWarningFormat("Reconnect failed, client disconnected, causes; prev.:{0} current:{1}", this.previousDisconnectCause, cause);
-                this.reconnectCalled = false;
-            }
-            if (!GameSetup.GS.logoutCalled && !GameSetup.GS.disconnectCalled)
-            {
-                GameSetup.GS.setError(true, "Player disconnected. \nTrying to reconnect...");
+                        this.HandleDisconnect(cause); // add attempts counter? to avoid infinite retries?
+                    }
+                    else
+                    {
+                        GameSetup.GS.setError(true, "Player disconnected. \nClick reconnect button.");
+                    }
+                }
+                this.inRoom = false;
+                this.previousDisconnectCause = cause;
 
-                this.HandleDisconnect(cause); // add attempts counter? to avoid infinite retries?
             }
-            else
-            {
-                GameSetup.GS.setError(true, "Player disconnected. \nClick reconnect button.");
-            }
-            this.inRoom = false;
-            this.previousDisconnectCause = cause;
-
 
         }
 

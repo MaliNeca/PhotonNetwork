@@ -7,6 +7,7 @@ using UnityEngine;
 using TMPro;
 using Photon.Pun.UtilityScripts;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
 {
@@ -309,7 +310,20 @@ public class PhotonLobbyCustomMatch : MonoBehaviourPunCallbacks, ILobbyCallbacks
         //Disconnection current player
         PhotonNetwork.Disconnect();
     }
+    public void DisconnectPlayerBack()
+    {
+        PhotonRoomCustomMatch.room.backButtonCreateRoomPressed = true;
+        Destroy(PhotonRoomCustomMatch.room.gameObject);
+        StartCoroutine(Disconnectt());
+        
+    }
+    IEnumerator Disconnectt()
+    {
+        PhotonNetwork.Disconnect();
+        while (PhotonNetwork.IsConnected) yield return null;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 
+    }
 }
 
 

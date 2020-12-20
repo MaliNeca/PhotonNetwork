@@ -1,6 +1,7 @@
 ﻿using Photon.Pun;
 using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
+using System.Collections;
 using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -49,6 +50,7 @@ public class PhotonRoomCustomMatch : MonoBehaviourPunCallbacks, IInRoomCallbacks
     public GameObject gameLobbyText;
     public GameObject waitMasterText;
 
+    public bool backButtonCreateRoomPressed = false;
 
     private void Awake()
     {
@@ -361,6 +363,8 @@ public class PhotonRoomCustomMatch : MonoBehaviourPunCallbacks, IInRoomCallbacks
 
         Debug.Log(PhotonNetwork.CurrentRoom.Name);
     }
+
+    
 }
 
 //class for Clipboard
