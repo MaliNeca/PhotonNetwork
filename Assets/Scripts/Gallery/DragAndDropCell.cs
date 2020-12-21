@@ -250,13 +250,14 @@ public class DragAndDropCell : MonoBehaviour, IDropHandler
                 // Debug.LogWarning("evo ga ovde drag");
 
 
-                //set source cell type
+                //set source cell type and sprite
                 if (cell.transform.parent.gameObject.CompareTag("Sheet"))
                 {
                     cell.cellType = DragAndDropCell.CellType.DropOnly;
+                    cell.GetComponent<Image>().sprite = cell.empty;
                 }
                 else
-                {
+                { 
                     cell.cellType = DragAndDropCell.CellType.Swap;
                 }
             }
