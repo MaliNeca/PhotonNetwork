@@ -48,6 +48,7 @@ public class GameSetup : MonoBehaviour
     public TMP_InputField errorMessage;
     public TMP_InputField justMessage;
 
+    public GameObject imageForDisable;
 
     private void OnEnable()
     {
@@ -104,6 +105,7 @@ public class GameSetup : MonoBehaviour
                 //set button active
                 swapButton.gameObject.SetActive(true);
 
+            imageForDisable.gameObject.SetActive(false);
 
             }
             else
