@@ -36,7 +36,7 @@ public class LobbyLoader : MonoBehaviour
         else
         {
             errorMessage.lineType = TMP_InputField.LineType.MultiLineSubmit;
-            errorMessage.text = "Error signing into the game. \nTeacher password is wrong.";
+            errorMessage.text = "Error signing into the game. \nOrganiser password is wrong.";
             errorMessage.gameObject.SetActive(true);
 
         }
@@ -54,7 +54,7 @@ public class LobbyLoader : MonoBehaviour
         else
         {
             errorMessage.lineType = TMP_InputField.LineType.MultiLineSubmit;
-            errorMessage.text = "Error singing into the game. \nStudent password is wrong.";
+            errorMessage.text = "Error singing into the game. \nPlayer password is wrong.";
             errorMessage.gameObject.SetActive(true);
         }
     }
